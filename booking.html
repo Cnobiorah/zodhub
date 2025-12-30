@@ -582,7 +582,8 @@ async function seatsLeft(spaceCode, dateStr){
     body: JSON.stringify({
       email,
       amountNGN,
-      callback_url: "http://127.0.0.1:5500/confirmation.html", // change to your live domain later
+      callback_url: CALLBACK_URL,
+ // change to your live domain later
       metadata: { booking: payload }
     })
   });
@@ -717,7 +718,8 @@ async function seatsLeft(spaceCode, dateStr){
     body: JSON.stringify({
       email,
       amountNGN,
-      callback_url: "http://127.0.0.1:5500/confirmation.html", // change to your live domain later
+      callback_url: CALLBACK_URL,
+ // change to your live domain later
       metadata: { booking: payload }
     })
   });
