@@ -374,8 +374,7 @@
     // === Supabase init (paste your keys) ===
     const SUPABASE_URL = "https://eaunslmvqezqlukmuutf.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhdW5zbG12cWV6cWx1a211dXRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY3NTA2NDcsImV4cCI6MjA4MjMyNjY0N30.JMlH4-tfDuhx8DwmJSSbHbbV5tGIkKYlIlYwxO0UND8";
-    
-const hasSupabaseKeys = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 20;
+    const hasSupabaseKeys = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 20;
     const sb = hasSupabaseKeys ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
     async function getSpaceIdByCode(code){
@@ -415,6 +414,9 @@ const hasSupabaseKeys = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.len
       GEN_YEARLY: 1200000,
       PRIV_DAILY: 35000
     };
+
+    // Production-safe callback URL (works on Vercel + custom domain)
+    const CALLBACK_URL = `${window.location.origin}/confirmation.html`;
 
     // ===== Availability (production-only) =====
 // This page requires a working Supabase connection and a real availability source.
@@ -555,17 +557,17 @@ async function seatsLeft(spaceCode, dateStr){
     return;
   }
 
-  const booking = {
+  const payload = {
     type: "general",
-    space_code: genPod.value,             // "G01" / "G02" / "G03"
-    booking_date: genStart.value,         // "YYYY-MM-DD"
-    package: mapPackage(genPackage.value),// daily/weekly/monthly/yearly
-    customer: { name, email, phone }
+    spaceCode: genPod.value,
+    package: genPackage.value,
+    startDate: genStart.value,
+    customer: { name, email }
   };
 
-  localStorage.setItem("zodHubPending", JSON.stringify(booking));
+  localStorage.setItem("zodHubPending", JSON.stringify(payload));
 
-const amountNGN = Number(prices[genPackage.value] || 0);
+  const amountNGN = PRICES[payload.package] || 0;
   if (!amountNGN) {
     alert("Payment amount is not set.");
     return;
@@ -580,9 +582,10 @@ const amountNGN = Number(prices[genPackage.value] || 0);
     body: JSON.stringify({
       email,
       amountNGN,
-      callback_url: CALLBACK_URL,
-      booking
-    })});
+      callback_url: "http://127.0.0.1:5500/confirmation.html", // change to your live domain later
+      metadata: { booking: payload }
+    })
+  });
 
   const data = await res.json();
   if (!data.authorization_url) {
@@ -689,17 +692,17 @@ const amountNGN = Number(prices[genPackage.value] || 0);
     return;
   }
 
-  const booking = {
+  const payload = {
     type: "private",
-    space_code: privSelected,                 // P01 / P02
-    booking_date: privDate.value,             // YYYY-MM-DD
-    package: "daily",
-    customer: { name, email, phone }
+    spaceCode: privSelected,       // P01/P02
+    package: "PRIV_DAILY",
+    startDate: privDate.value,
+    customer: { name, email, phone: "" }
   };
 
-  localStorage.setItem("zodHubPending", JSON.stringify(booking));
+  localStorage.setItem("zodHubPending", JSON.stringify(payload));
 
-const amountNGN = Number(privatePriceNGN || prices.PRIVATE_DAILY || 0);
+  const amountNGN = PRICES.PRIV_DAILY || 0;
   if (!amountNGN) {
     alert("Payment amount is not set.");
     return;
@@ -714,9 +717,10 @@ const amountNGN = Number(privatePriceNGN || prices.PRIVATE_DAILY || 0);
     body: JSON.stringify({
       email,
       amountNGN,
-      callback_url: CALLBACK_URL,
-      booking
-    })});
+      callback_url: "http://127.0.0.1:5500/confirmation.html", // change to your live domain later
+      metadata: { booking: payload }
+    })
+  });
 
   const data = await res.json();
   if (!data.authorization_url) {
