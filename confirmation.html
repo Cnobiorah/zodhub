@@ -325,8 +325,7 @@
     // Query params
     const qs = new URLSearchParams(location.search);
     const codeParam = qs.get("code");
-    const refParam = qs.get("reference") || qs.get("trxref");
-
+    const refParam = qs.get("reference") || qs.get("ref");
 
     // Helpers
     const el = (id) => document.getElementById(id);
@@ -372,60 +371,16 @@
     }
 
     async function verifyPaystack(reference){
-      // Use the Edge Function URL (same project)
-      const url = VERIFY_FN_URL;
-      const res = await fetch(url, {
+      const res = await fetch(VERIFY_FN_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Supabase Edge Functions accept either `Authorization: Bearer <anon>` or `apikey: <anon>`
-          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-          "apikey": SUPABASE_ANON_KEY
+          "Authorization": "Bearer " + SUPABASE_ANON_KEY
         },
         body: JSON.stringify({ reference })
       });
-
-      // Always try to read JSON (even when HTTP status is not 2xx)
-      const rawText = await res.text();
-      let payload = null;
-      try {
-        payload = rawText ? JSON.parse(rawText) : null;
-      } catch (_) {
-        payload = null;
-      }
-
-      // Treat non-2xx as a handled error, not a crash
-      if (!res.ok) {
-        // If backend returns a usable success payload, accept it
-        if (payload && (payload.ok === true || payload.already_processed === true)) return payload;
-
-        return {
-          ok: false,
-          http_status: res.status,
-          error: (payload && payload.error) ? payload.error : `Verify failed (${res.status})`,
-          raw: payload ?? rawText
-        };
-      }
-
-      return payload ?? { ok: false, error: "Empty response from verify-paystack" };
+      return await res.json();
     }
-
-      // Treat non-2xx as a handled error, not a crash
-      if (!res.ok) {
-        // If backend returns a usable success payload, accept it
-        if (payload && (payload.ok === true || payload.already_processed === true)) return payload;
-
-        return {
-          ok: false,
-          http_status: res.status,
-          error: payload?.error || `Verify failed (${res.status})`,
-          raw: payload ?? rawText
-        };
-      }
-
-      return payload ?? { ok: false, error: "Empty response from verify-paystack" };
-    }
-
 
     // RPC: get_booking_by_code(p_code text)
     async function loadFromSupabaseByCode(code){
