@@ -325,7 +325,8 @@
     // Query params
     const qs = new URLSearchParams(location.search);
     const codeParam = qs.get("code");
-    const refParam = qs.get("reference") || qs.get("ref");
+    const refParam = qs.get("reference") || qs.get("trxref");
+
 
     // Helpers
     const el = (id) => document.getElementById(id);
