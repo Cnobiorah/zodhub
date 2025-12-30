@@ -372,12 +372,15 @@
     }
 
     async function verifyPaystack(reference){
-      const url = `${SUPABASE_FUNCTIONS_BASE}/verify-paystack`;
+      // Use the Edge Function URL (same project)
+      const url = VERIFY_FN_URL;
       const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+          // Supabase Edge Functions accept either `Authorization: Bearer <anon>` or `apikey: <anon>`
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+          "apikey": SUPABASE_ANON_KEY
         },
         body: JSON.stringify({ reference })
       });
@@ -390,6 +393,22 @@
       } catch (_) {
         payload = null;
       }
+
+      // Treat non-2xx as a handled error, not a crash
+      if (!res.ok) {
+        // If backend returns a usable success payload, accept it
+        if (payload && (payload.ok === true || payload.already_processed === true)) return payload;
+
+        return {
+          ok: false,
+          http_status: res.status,
+          error: (payload && payload.error) ? payload.error : `Verify failed (${res.status})`,
+          raw: payload ?? rawText
+        };
+      }
+
+      return payload ?? { ok: false, error: "Empty response from verify-paystack" };
+    }
 
       // Treat non-2xx as a handled error, not a crash
       if (!res.ok) {
