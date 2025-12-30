@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+
+  <meta name="description" content="ZöD Hub is a focused, friendly workspace with general pods and private rooms. Book online and receive your access code instantly." />
+<title>ZöD Hub — Focused Workspace</title>
+  <link rel="icon" href="favicon.ico" />
+  <link rel="canonical" href="https://zodhub.co/index.html" />
+  <meta property="og:site_name" content="ZöD Hub" />
+  <meta property="og:title" content="ZöD Hub" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://zodhub.co/index.html" />
+<style>
+
+/* ZöD Hub — Index-only styles (embedded)
+   Note: This file is self-contained; no external styles.css required.
+*/
+:root{
+  --bg:#fbfbf8;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#475569;
+  --line:#e5e7eb;
+  --accent:#0b3b89;
+  --radius:18px;
+  --shadow:0 10px 28px rgba(2,6,23,.08);
+  --shadow2:0 6px 16px rgba(2,6,23,.08);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  background:var(--bg);
+  color:var(--text);
+}
+a{color:inherit; text-decoration:none}
+
+.container{max-width:1100px; margin:0 auto; padding:18px}
+.row{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+.hr{height:1px; background:var(--line); margin:14px 0}
+.meta{color:var(--muted); font-size:13px}
+
+/* Navbar */
+.nav{
+  position:sticky; top:0; z-index:10;
+  background:rgba(251,251,248,.85);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{display:flex; align-items:center; justify-content:space-between; gap:12px}
+.brand{display:flex; align-items:center; gap:10px; font-weight:900}
+.logo-mark{
+  width:34px; height:34px; border-radius:12px;
+  background:linear-gradient(135deg, var(--accent), #0ea5e9);
+  box-shadow:var(--shadow2);
+}
+.nav-links{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.nav-links a{
+  padding:10px 10px; border-radius:12px;
+  color:var(--muted); font-weight:800;
+}
+.nav-links a:hover{background:#fff; color:var(--text); box-shadow:var(--shadow2)}
+
+/* Buttons */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:12px 16px; border-radius:14px;
+  font-weight:900; border:1px solid transparent; cursor:pointer;
+}
+.btn-primary{background:var(--accent); color:#fff; box-shadow:var(--shadow2)}
+.btn-primary:hover{filter:brightness(.96)}
+.btn-outline{background:transparent; border-color:var(--line); color:var(--text)}
+.btn-outline:hover{background:#fff; box-shadow:var(--shadow2)}
+
+/* Hero */
+.hero{padding:26px 0 10px}
+.hero-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius: calc(var(--radius) + 6px);
+  box-shadow:var(--shadow);
+  padding:24px;
+}
+.h1{margin:0 0 10px; font-size:42px; line-height:1.1}
+.p{margin:0 0 16px; color:var(--muted); font-size:16px; max-width:70ch}
+.p.small{font-size:13px}
+
+/* Chips */
+.chips{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+.chip{
+  font-size:12px; font-weight:900;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--muted);
+}
+
+/* Sections + cards */
+.section-title{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+  margin:18px 0 10px;
+}
+.section-title h2{margin:0; font-size:20px}
+.section-title span{color:var(--muted); font-size:13px}
+
+.grid{display:grid; gap:16px}
+.grid-2{grid-template-columns:repeat(2, minmax(0, 1fr))}
+.grid-3{grid-template-columns:repeat(3, minmax(0, 1fr))}
+@media (max-width:900px){ .grid-2,.grid-3{grid-template-columns:1fr} }
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow2);
+  padding:16px;
+}
+.card h3{margin:0 0 6px; font-size:18px}
+.card p{margin:0 0 12px; color:var(--muted)}
+
+/* Steps */
+.steps .step{
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+  padding:14px;
+}
+.steps .step b{display:block; margin-bottom:6px}
+
+/* Footer */
+.footer{
+  border-top:1px solid var(--line);
+  margin-top:26px;
+  padding:18px 0;
+  color:var(--muted);
+  font-size:13px;
+}
+.footer .cols{display:grid; grid-template-columns:2fr 1fr 1fr; gap:16px}
+@media (max-width:900px){ .footer .cols{grid-template-columns:1fr} }
+.footer a{color:var(--muted); font-weight:800}
+.footer a:hover{color:var(--text)}
+
+  
+/* Warm & welcoming tweaks */
+:root{
+  --warm:#f59e0b;
+  --warm2:#fb7185;
+}
+.h1{font-size:44px}
+@media (max-width:600px){ .h1{font-size:34px} }
+
+.hero{padding:30px 0 14px}
+.hero-card{position:relative; overflow:hidden}
+.hero-card:before{
+  content:"";
+  position:absolute; inset:-120px -140px auto auto;
+  width:320px; height:320px; border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, rgba(245,158,11,.32), rgba(251,113,133,.16), transparent 60%);
+  filter: blur(2px);
+  pointer-events:none;
+}
+.hero-card:after{
+  content:"";
+  position:absolute; inset:auto auto -140px -160px;
+  width:360px; height:360px; border-radius:50%;
+  background:radial-gradient(circle at 40% 40%, rgba(14,165,233,.18), rgba(11,59,137,.14), transparent 62%);
+  pointer-events:none;
+}
+
+.kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 10px; border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--muted);
+  font-size:12px; font-weight:900;
+  width:max-content;
+  margin-bottom:10px;
+}
+.kdot{width:8px;height:8px;border-radius:50%;background:var(--warm)}
+.hero-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px}
+.hero-actions .btn{padding:12px 18px}
+.btn-secondary{
+  background:#fff;
+  border:1px solid var(--line);
+  color:var(--text);
+  box-shadow:var(--shadow2);
+}
+.btn-secondary:hover{background:#fff; filter:brightness(.99)}
+.btn-link{
+  background:transparent;
+  border-color:transparent;
+  color:var(--muted);
+  padding:12px 10px;
+}
+.btn-link:hover{color:var(--text); background:#fff; border-color:var(--line); box-shadow:var(--shadow2)}
+.highlight{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:16px;
+  align-items:start;
+  }
+@media (max-width:900px){ .highlight{grid-template-columns:1fr} }
+
+.bullets{display:grid; gap:10px; margin-top:12px}
+.bullet{
+  display:flex; gap:10px; align-items:flex-start;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+}
+.bullet .icon{
+  width:34px; height:34px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, rgba(245,158,11,.22), rgba(14,165,233,.18));
+  border:1px solid var(--line);
+  font-weight:900;
+}
+
+.pills{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+.pill{
+  padding:8px 10px; border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.85);
+  font-size:12px; font-weight:900; color:var(--muted);
+}
+
+.fineprint{color:var(--muted); font-size:12px; line-height:1.5}
+
+
+
+
+/* BOOK NOW default + visited */
+.nav-links a.btn.btn-primary,
+.nav-links a.btn.btn-primary:visited{
+  background: var(--accent);
+  color:#fff;
+  opacity:1;
+  filter:none;
+}
+
+/* BOOK NOW hover/focus stays the SAME */
+.nav-links a.btn.btn-primary:hover,
+.nav-links a.btn.btn-primary:focus{
+  background: var(--accent);
+  color:#fff;
+  opacity:1;
+  filter:none;
+  box-shadow: var(--shadow2);
+}
+
+
+/* ===== NAVBAR: consistent CTA (BOOK NOW) ===== */
+/* Only non-button nav links get the hover tile */
+.nav-links a:not(.btn):hover{
+  background:#fff;
+  color:var(--text);
+  box-shadow:var(--shadow2);
+  opacity:1;
+}
+/* BOOK NOW stays blue + white always */
+.nav-links a.btn.btn-primary,
+.nav-links a.btn.btn-primary:visited{
+  background: var(--accent);
+  color:#fff;
+  opacity:1;
+  filter:none;
+}
+.nav-links a.btn.btn-primary:hover,
+.nav-links a.btn.btn-primary:focus{
+  background: var(--accent);
+  color:#fff;
+  opacity:1;
+  filter:none;
+  box-shadow: var(--shadow2);
+}
+
+
+
+/* ====== IMAGERY UPGRADE (hero + mini gallery + card thumbs) ====== */
+.hero-card{
+  min-height: 340px;
+}
+.hero-media{
+  position:absolute; inset:0;
+  z-index:0;
+}
+.hero-media img{
+  width:100%; height:100%;
+  object-fit:cover;
+  transform: scale(1.03);
+  filter: saturate(1.02) contrast(1.02);
+}
+.hero-overlay{
+  position:absolute; inset:0;
+  background: linear-gradient(90deg, rgba(2,6,23,.70) 0%, rgba(2,6,23,.40) 55%, rgba(2,6,23,.15) 100%);
+}
+.hero-content{
+  position:relative;
+  z-index:2;
+  color:#fff;
+  max-width: 74ch;
+}
+.hero-content .p,
+.hero-content .meta,
+.hero-content .pill,
+.hero-content .kicker{
+  color: rgba(255,255,255,.86);
+}
+.hero-content .kicker{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+}
+.hero-content .kdot{background: var(--warm)}
+.hero-content .pill{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+}
+.hero-content .btn-secondary{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+  color:#fff;
+}
+.hero-content .btn-secondary:hover{background: rgba(255,255,255,.14)}
+.hero-content .btn-link{
+  color: rgba(255,255,255,.78);
+}
+.hero-content .btn-link:hover{
+  color:#fff;
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.18);
+}
+.hero-card:before, .hero-card:after{display:none;} /* remove the circles behind image */
+.hero-title{
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.hero-subtitle{
+  margin: 10px 0 0;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.5;
+  max-width: 60ch;
+  opacity: .92;
+}
+
+
+/* Mini gallery */
+@media (max-width:900px){ }
+
+.g-card{
+  position:relative;
+  border-radius: calc(var(--radius) + 6px);
+  overflow:hidden;
+  border:1px solid var(--line);
+  box-shadow: var(--shadow);
+  background:#fff;
+
+  height:100%;
+  min-height:0;
+}
+.g-card img{width:100%; height:100%; object-fit:cover; display:block}
+.g-card .cap{
+  position:absolute; left:14px; right:14px; bottom:14px;
+  padding:10px 12px;
+  border-radius: 16px;
+  background: rgba(2,6,23,.58);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(10px);
+  font-weight:900;
+}
+@media (max-width:900px){ }
+
+/* Card thumbnail helper */
+.thumb{
+  width:100%;
+  height:140px;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  margin: 0 0 12px;
+  background:#f3f4f6;
+}
+.thumb img{width:100%; height:100%; object-fit:cover; display:block}
+
+/* ===== HERO SLIDESHOW (CSS-only) ===== */
+.hero-slideshow img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  animation: heroFade 18s infinite;
+}
+
+.hero-slideshow img:nth-child(1){animation-delay:0s;}
+.hero-slideshow img:nth-child(2){animation-delay:6s;}
+.hero-slideshow img:nth-child(3){animation-delay:12s;}
+
+@keyframes heroFade{
+  0%{opacity:0;}
+  10%{opacity:1;}
+  30%{opacity:1;}
+  40%{opacity:0;}
+  100%{opacity:0;}
+}
+
+
+/* ===== Icon tiles for benefits & amenities ===== */
+.icon-tile{
+  width:44px; height:44px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  line-height:1;
+  background: linear-gradient(135deg, rgba(245,158,11,.16), rgba(14,165,233,.14));
+  border:1px solid var(--line);
+  flex: 0 0 44px;
+}
+.amenity{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.amenity h3{
+  margin:0 0 4px;
+  font-size:16px;
+}
+.amenity p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+}
+
+
+/* ===== FAQ Modal ===== */
+.modal{position:fixed; inset:0; display:none; z-index:9999;}
+.modal.is-open{display:block;}
+.modal-backdrop{position:absolute; inset:0; background:rgba(0,0,0,.55);}
+.modal-dialog{
+  position:relative;
+  max-width:720px;
+  margin:8vh auto;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:18px;
+  box-shadow:0 18px 60px rgba(0,0,0,.35);
+}
+.modal-close{
+  position:absolute; top:12px; right:12px;
+  width:38px; height:38px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:transparent;
+  font-size:22px;
+  cursor:pointer;
+}
+.modal ol{margin:0; padding-left:18px; display:grid; gap:12px;}
+.modal li{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+}
+
+
+/* ===== Spaces card + reception image ===== */
+.spaces-with-image{
+  display:grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap:24px;
+  align-items:stretch;
+}
+
+.spaces-card > section{
+  height:100%;
+}
+
+.spaces-image{
+  border-radius:24px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.spaces-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+@media (max-width:900px){
+  .spaces-with-image{
+    grid-template-columns:1fr;
+  }
+  .spaces-image img{
+    height:260px;
+  }
+}
+
+
+/* ===== Section divider ===== */
+.section-divider{
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--line), transparent);
+  margin:28px 0;
+}
+
+
+
+/* ===== Image caption pill (scoped to image cards) ===== */
+.g-card{ position:relative; }
+.spaces-image-card{ position:relative; padding:0; overflow:hidden; border-radius: var(--radius); margin-top:0;
+  }
+
+.g-card .cap,
+.spaces-image-card .cap{
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:16px;
+  background:#6f7177;
+  color:#fff;
+  padding:10px 14px;
+  border-radius:14px;
+  font-weight:600;
+  font-size:0.95rem;
+  line-height:1.2;
+  max-width: calc(100% - 32px);
+}
+
+.spaces-image-card img{
+  width:100%;
+  height:100%;
+  min-height: 280px;
+  object-fit:cover;
+  display:block;
+}
+
+
+/* ===== Gallery layout (Sketch) ===== */
+.gallery{
+  display:grid;
+  grid-template-columns: 1.25fr .85fr;
+  gap:16px;
+  margin: 10px 0 18px;
+  align-items:start;
+}
+
+.gallery .g-card{
+  position:relative;
+  overflow:hidden;
+  border-radius: var(--radius);
+  border:1px solid var(--line);
+  box-shadow: var(--shadow);
+  background:#fff;
+}
+
+.g-left{
+  height: calc(220px * 2 + 16px); /* matches right stack height */
+}
+
+.g-left img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.g-stack{
+  display:grid;
+  grid-template-rows: 220px 220px; /* keep right card sizes */
+  gap:16px;
+}
+
+.g-stack .g-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+@media (max-width: 900px){
+  .gallery{ grid-template-columns:1fr; }
+  .g-left{ height: 320px; }
+  .g-stack{ grid-template-rows: 220px 220px; }
+}
+
+
+/* ===== Spaces + meeting room card (Sketch) ===== */
+.spaces-with-image{
+  display:grid;
+  grid-template-columns: 1fr .9fr;
+  gap:24px;
+  align-items:stretch;
+}
+.spaces-card > section{ height:100%; }
+.spaces-image-card{
+  position:relative;
+  border-radius:24px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  box-shadow: var(--shadow);
+  background:#fff;
+  padding:0;
+}
+.spaces-image-card img{
+  width:100%;
+  height:100%;
+  min-height: 280px;
+  object-fit:cover;
+  display:block;
+}
+@media (max-width:900px){
+  .spaces-with-image{ grid-template-columns:1fr; }
+  .spaces-image-card img{ height:260px; }
+}
+
+
+.highlight .spaces-image-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+
+/* Highlight alignment: make image card match left card height */
+.highlight .spaces-image-card{
+  height: 100%;
+}
+.highlight .spaces-image-card img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* Highlight: keep image filling card */
+.highlight .spaces-image-card{ height: auto; } /* JS will set inline height */
+.highlight .spaces-image-card img{ width:100%; height:100%; object-fit:cover; display:block; }
+</style>
+</head>
+<body>
+<div class="nav">
+<div class="container nav-inner">
+<a class="brand" href="index.html">
+<span class="logo-mark"></span>
+<span>ZöD Hub</span>
+</a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="faq.html">FAQs</a>
+<a href="location.html#contact">Contact</a>
+<a class="btn btn-primary" href="booking.html">BOOK NOW</a>
+</div>
+</div>
+</div>
+<main class="container">
+<!-- HERO -->
+<section class="hero">
+<div class="hero-card">
+<div aria-hidden="true" class="hero-media hero-slideshow">
+  <img src="images/hero-3.jpg" alt="Workspace at ZöD Hub"/>
+  <img src="images/hero-1.jpg" alt="Reception area at ZöD Hub"/>
+  <img src="images/hero-2.jpg" alt="Meeting room at ZöD Hub"/>
+  
+  <div class="hero-overlay"></div>
+</div>
+<div class="hero-content">
+<div class="kicker"><span class="kdot"></span><span>Warm, calm workspace — walk in ready</span></div>
+<h1 class="h1">Welcome to ZöD Hub</h1>
+<p class="hero-subtitle">Flexible workspaces for focused work, meetings, and productivity.</p>
+
+<div class="hero-actions">
+<a class="btn btn-primary" href="booking.html">Book a space</a>
+<a class="btn btn-secondary" href="pricing.html">See pricing</a>
+<a class="btn btn-link" href="location.html">Find us</a>
+</div>
+<div aria-label="Highlights" class="pills">
+<span class="pill">Instant booking code</span>
+<span class="pill">Front-desk check-in</span>
+<span class="pill">Pods + private rooms</span>
+<span class="pill">Friendly support</span>
+</div>
+</div></div>
+</section>
+<div class="section-divider"></div><section class="gallery" aria-label="Workspace gallery">
+  <div class="g-card g-left">
+    <img alt="Reception desk at ZoD Hub" src="images/reception.jpg" loading="lazy"/>
+    <div class="cap">Reception</div>
+  </div>
+
+  <div class="g-stack">
+    <div class="g-card">
+      <img alt="Shared office desks" src="images/shared%20office.jpg" loading="lazy"/>
+      <div class="cap">Shared office</div>
+    </div>
+
+    <div class="g-card">
+      <img alt="Private office" src="images/private%20office.jpg" loading="lazy"/>
+      <div class="cap">Private office</div>
+    </div>
+  </div>
+</section>
+<!-- HIGHLIGHT -->
+<section class="highlight" style="margin-top:14px">
+<div class="card" id="spacesLeftCard">
+<h3 style="margin:0 0 6px">Spaces that fit your day</h3>
+
+<div class="bullets">
+<div class="bullet">
+<div class="icon">G</div>
+<div>
+<b>General Pods (G01–G03)</b><br/>
+<span class="meta">Each pod has 4 seats. Packages: Daily · Weekly · Monthly · Yearly.</span>
+</div>
+</div>
+<div class="bullet">
+<div class="icon">P</div>
+<div>
+<b>Private Spaces (P01–P02)</b><br/>
+<span class="meta">Quiet and dedicated. Daily booking only.</span>
+</div>
+</div>
+</div>
+<div class="hr"></div>
+<div class="fineprint">
+          Seat is assigned at the front desk on arrival.
+        </div>
+</div>
+
+<div class="card spaces-image-card" id="spacesRightImage">
+  <img src="images/meeting%20room.jpg" alt="Reception desk at ZoD Hub" loading="lazy">
+  <div class="cap">Meeting room</div>
+</div>
+
+</section>
+<div class="section-divider"></div>
+
+<!-- TRUST / AMENITIES -->
+<div class="section-title" style="margin-top:22px">
+<h2>What you’ll love</h2>
+<span></span>
+</div>
+<section class="grid grid-3">
+<div class="card"><div class="row" style="gap:12px; align-items:center; margin:0 0 10px"><div class="icon-tile" aria-hidden="true">🤝</div><div class="meta" style="font-weight:900; color:var(--text)">Benefit</div></div><h3>Warm welcome</h3>
+
+<div class="meta">No confusion. No awkwardness.</div>
+</div>
+<div class="card"><div class="row" style="gap:12px; align-items:center; margin:0 0 10px"><div class="icon-tile" aria-hidden="true">🔐</div><div class="meta" style="font-weight:900; color:var(--text)">Benefit</div></div><h3>Reliable access</h3>
+
+<div class="meta">Simple and secure.</div>
+</div>
+<div class="card"><div class="row" style="gap:12px; align-items:center; margin:0 0 10px"><div class="icon-tile" aria-hidden="true">🎧</div><div class="meta" style="font-weight:900; color:var(--text)">Benefit</div></div><h3>Designed for focus</h3>
+
+<div class="meta">Work your way.</div>
+</div>
+</section>
+
+<!-- AMENITIES (Services offered) -->
+<div class="section-title" style="margin-top:18px">
+  <h2>Workspace features</h2>
+  
+</div>
+
+<section class="grid grid-3">
+  <div class="card">
+    <div class="amenity">
+      <div class="icon-tile" aria-hidden="true">📶</div>
+      <div>
+        <h3>High-speed Wi-Fi</h3>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="amenity">
+      <div class="icon-tile" aria-hidden="true">🔌</div>
+      <div>
+        <h3>Reliable power</h3>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="amenity">
+      <div class="icon-tile" aria-hidden="true">🖨️</div>
+      <div>
+        <h3>Printing & support</h3>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="amenity">
+      <div class="icon-tile" aria-hidden="true">☕</div>
+      <div>
+        <h3>Refreshments</h3>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="amenity">
+      <div class="icon-tile" aria-hidden="true">🅿️</div>
+      <div>
+        <h3>Parking</h3>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="amenity">
+      <div class="icon-tile" aria-hidden="true">📺</div>
+      <div>
+        <h3>Meeting-ready rooms</h3>
+        
+      </div>
+    </div>
+  </div>
+</section>
+<div class="section-divider"></div>
+
+<!-- SINGLE CTA -->
+<section class="card" style="margin-top:18px">
+<div class="row" style="justify-content:space-between">
+<div>
+<h3 style="margin:0 0 6px">Ready when you are ✨</h3>
+<p class="p small" style="margin:0"></p>
+</div>
+<a class="btn btn-primary" href="booking.html">Book a space</a>
+</div>
+</section>
+<footer class="footer">
+<div class="cols">
+<div>
+<b>ZöD Hub</b><br/>
+<span>Friendly workspace • Verified access • Simple booking</span>
+</div>
+<div>
+<b>Pages</b><br/>
+<a href="pricing.html">Pricing</a><br/>
+<a href="location.html">Location</a><br/>
+<a href="faq.html">FAQs</a><br/>
+<a href="booking.html">Book a space</a>
+</div>
+<div>
+<b>Contact</b><br/>
+<span>Email: admin@zodstudio.com</span><br/>
+<span class="meta">Phone/WhatsApp: (add)</span><br/><br/>
+<b>Business hours</b><br/>
+<span class="meta">Mon–Fri: 8:00am – 6:00pm</span><br/>
+<span class="meta">Sat: 9:00am – 4:00pm</span><br/>
+<span class="meta">Sun: Closed</span>
+</div>
+</div>
+</footer>
+</main>
+
+<!-- FAQ MODAL -->
+<div class="modal" id="faqModal" aria-hidden="true">
+  <div class="modal-backdrop" data-close="true"></div>
+  <div class="modal-dialog" role="dialog" aria-modal="true">
+    <button class="modal-close" data-close="true">×</button>
+    <h2>How it works</h2>
+    <ol>
+      <li><b>1) Choose</b><br/><span class="meta">Pick your pod or private space and select a package.</span></li>
+<li><b>2) Pay &amp; receive your code</b><br/><span class="meta">Get a unique booking code for access verification.</span></li>
+<li><b>3) Check in &amp; settle</b><br/><span class="meta">Show your code at the front desk and we’ll seat you.</span></li>
+    </ol>
+  </div>
+</div>
+
+
+<script>
+(() => {
+  const left = document.getElementById('spacesLeftCard');
+  const right = document.getElementById('spacesRightImage');
+  if (!left || !right) return;
+
+  const sync = () => {
+    const h = left.getBoundingClientRect().height;
+    if (h > 0) right.style.height = `${Math.round(h)}px`;
+  };
+
+  sync();
+  window.addEventListener('resize', sync);
+
+  const ro = new ResizeObserver(sync);
+  ro.observe(left);
+
+  window.addEventListener('load', sync);
+})();
+</script>
+
+</body>
+</html>

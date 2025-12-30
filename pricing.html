@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <meta name="description" content="Clear pricing for ZöD Hub general workstations and private spaces. Book online and receive your access code instantly." />
+<title>Pricing — ZöD Hub</title>
+  <link rel="icon" href="favicon.ico" />
+  <link rel="canonical" href="https://zodhub.co/pricing.html" />
+  <meta property="og:site_name" content="ZöD Hub" />
+  <meta property="og:title" content="Pricing — ZöD Hub" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://zodhub.co/pricing.html" />
+<style>
+    :root{
+      --bg:#fbfbf8;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --line:#e5e7eb;
+      --accent:#0b3b89;
+      --radius:18px;
+      --shadow:0 10px 28px rgba(2,6,23,.08);
+      --shadow2:0 6px 16px rgba(2,6,23,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit; text-decoration:none}
+
+    .nav{
+      position:sticky; top:0; z-index:10;
+      background:rgba(251,251,248,.85);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .container{max-width:1100px; margin:0 auto; padding:18px}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; gap:12px}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900}
+    .mark{width:34px; height:34px; border-radius:12px; background:linear-gradient(135deg,var(--accent),#0ea5e9); box-shadow:var(--shadow2)}
+    .nav-links{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .nav-links a{padding:10px 10px; border-radius:12px; color:var(--muted); font-weight:800}
+    .nav-links a:hover{background:#fff; color:var(--text); box-shadow:var(--shadow2)}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:12px 16px; border-radius:14px;
+      font-weight:900;
+      border:1px solid transparent;
+      cursor:pointer;
+    }
+    .btn-primary{background:var(--accent); color:#fff; box-shadow:var(--shadow2)}
+    .btn-primary:hover{filter:brightness(.96)}
+    .btn-outline{background:transparent; border-color:var(--line); color:var(--text)}
+    .btn-outline:hover{background:#fff; box-shadow:var(--shadow2)}
+
+    .page-head{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+      margin:10px 0 12px;
+    }
+    h1{margin:0; font-size:28px}
+    .sub{color:var(--muted); font-size:13px}
+
+    .grid{display:grid; gap:16px}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (max-width: 900px){ .grid-3,.grid-2{grid-template-columns:1fr} }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow2);
+      padding:16px;
+    }
+    .card h2{margin:0 0 6px; font-size:18px}
+    .meta{color:var(--muted); font-size:13px}
+    .hr{height:1px; background:var(--line); margin:14px 0}
+
+    .price{
+      font-size:34px;
+      font-weight:1000;
+      letter-spacing:-.5px;
+      margin:10px 0 6px;
+    }
+    .per{color:var(--muted); font-weight:800; font-size:13px}
+    ul{margin:10px 0 0; padding:0 0 0 18px; color:var(--muted)}
+    li{margin:8px 0}
+
+    .badge{
+      display:inline-flex; align-items:center;
+      padding:6px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--muted);
+    }
+    .badge.popular{
+      border-color:rgba(11,59,137,.25);
+      background:rgba(11,59,137,.08);
+      color:var(--text);
+    }
+
+    .section-title{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+      margin:20px 0 10px;
+    }
+    .section-title h2{margin:0; font-size:20px}
+    .notice{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:12px;
+      color:var(--muted);
+    }
+
+    .toggle{
+      display:flex; gap:10px; flex-wrap:wrap;
+      background:#fff; border:1px solid var(--line);
+      border-radius:16px; padding:8px;
+      box-shadow:var(--shadow2);
+    }
+    .toggle button{
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:1000;
+      border:1px solid transparent;
+      background:transparent;
+      color:var(--muted);
+      cursor:pointer;
+    }
+    .toggle button.active{
+      background:rgba(11,59,137,.08);
+      border-color:rgba(11,59,137,.25);
+      color:var(--text);
+    }
+
+    .footer{
+      border-top:1px solid var(--line);
+      margin-top:26px;
+      padding:18px 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .footer .cols{display:grid; grid-template-columns:2fr 1fr 1fr; gap:16px}
+    @media (max-width:900px){.footer .cols{grid-template-columns:1fr}}
+    .footer a{color:var(--muted); font-weight:800}
+    .footer a:hover{color:var(--text)}
+  
+/* ===== NAVBAR: consistent CTA (BOOK NOW) ===== */
+/* Only non-button nav links get the hover tile */
+.nav-links a:not(.btn):hover{
+  background:#fff;
+  color:var(--text);
+  box-shadow:var(--shadow2);
+  opacity:1;
+}
+/* BOOK NOW stays blue + white always */
+.nav-links a.btn.btn-primary,
+.nav-links a.btn.btn-primary:visited{
+  background: var(--accent);
+  color:#fff;
+  opacity:1;
+  filter:none;
+}
+.nav-links a.btn.btn-primary:hover,
+.nav-links a.btn.btn-primary:focus{
+  background: var(--accent);
+  color:#fff;
+  opacity:1;
+  filter:none;
+  box-shadow: var(--shadow2);
+}
+
+</style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span class="mark"></span><span>ZöD Hub</span></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="faq.html">FAQs</a>
+        <a href="location.html#contact">Contact</a>
+        <a class="btn btn-primary" href="booking.html">BOOK NOW</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- HEADER -->
+    <div class="page-head">
+      <div>
+        <h1>Pricing</h1>
+        <div class="sub">Clear pricing for General and Private workspace options.</div>
+      </div>
+
+      </div>
+
+    <div class="notice">
+      <span class="badge">NGN</span> <span class="meta">All prices are in Nigerian Naira (₦).</span>
+      <div class="hr"></div>
+
+      <b style="font-size:13px">How booking works</b><br />
+      <span class="meta">
+        After payment, you’ll receive a unique booking code and QR code to present at the front desk.
+        General space is shared (capacity 4). Private spaces (P01, P02) are booked exclusively per day.
+      </span>
+    </div>
+
+    <!-- GENERAL -->
+    <div class="section-title">
+      <h2>General Workstation (4-in-1)</h2>
+      <span class="sub">Shared workspace • Packages available</span>
+    </div>
+
+    <section class="grid grid-3" id="generalCards">
+      <!-- Daily -->
+      <div class="card">
+        <span class="badge">General</span>
+        <h2>Daily</h2>
+        <div class="price">₦12,000</div>
+        <div class="per">per day</div>
+        <div class="hr"></div>
+        <ul>
+          <li>Access to shared 4-in-1 workstation</li>
+          <li>Wi-Fi & power access</li>
+          <li>Front desk check-in with code</li>
+        </ul>
+        <div class="hr"></div>
+        <a class="btn btn-primary" href="booking.html">Book Daily</a>
+      </div>
+
+      <!-- Weekly -->
+      <div class="card">
+        <span class="badge popular">Most popular</span>
+        <h2>Weekly</h2>
+        <div class="price">₦50,000</div>
+        <div class="per">per week</div>
+        <div class="hr"></div>
+        <ul>
+          <li>7 days access (from your start date)</li>
+          <li>Best for short projects and focus weeks</li>
+          <li>Front desk check-in with code</li>
+        </ul>
+        <div class="hr"></div>
+        <a class="btn btn-primary" href="booking.html">Book Weekly</a>
+      </div>
+
+      <!-- Monthly -->
+      <div class="card">
+        <span class="badge">General</span>
+        <h2>Monthly</h2>
+        <div class="price">₦160,000</div>
+        <div class="per">per month</div>
+        <div class="hr"></div>
+        <ul>
+          <li>30 days access (from your start date)</li>
+          <li>Ideal for consistent routine</li>
+          <li>Front desk check-in with code</li>
+        </ul>
+        <div class="hr"></div>
+        <a class="btn btn-primary" href="booking.html">Book Monthly</a>
+      </div>
+    </section>
+
+    <section class="grid grid-2" style="margin-top:16px">
+      <!-- Yearly -->
+      <div class="card">
+        <span class="badge">General</span>
+        <h2>Yearly</h2>
+        <div class="price">₦1,200,000</div>
+        <div class="per">per year</div>
+        <div class="hr"></div>
+        <ul>
+          <li>365 days access (from your start date)</li>
+          <li>Best value for long-term members</li>
+          <li>Front desk check-in with code</li>
+        </ul>
+        <div class="hr"></div>
+        <a class="btn btn-primary" href="booking.html">Book Yearly</a>
+      </div>
+
+      <!-- What's included -->
+      <div class="card">
+        <h2>Included (General)</h2>
+        <p class="meta">You can edit this list to match what you’ll provide in the space.</p>
+        <div class="hr"></div>
+        <ul>
+          <li>Quiet / focus-friendly environment</li>
+          <li>Wi-Fi + power</li>
+          <li>Front desk support</li>
+          <li>Optional add-ons (printing, coffee, lockers) — if offered</li>
+        </ul>
+        <div class="hr"></div>
+        <a class="btn btn-outline" href="location.html">See Location</a>
+      </div>
+    </section>
+
+    <!-- PRIVATE -->
+    <div class="section-title">
+      <h2>Private Space (P01 / P02)</h2>
+      <span class="sub">Dedicated • Daily booking only</span>
+    </div>
+
+    <section class="grid grid-2">
+      <div class="card">
+        <span class="badge">Private</span>
+        <h2>Daily — Private Space</h2>
+        <div class="price">₦35,000</div>
+        <div class="per">per day</div>
+        <div class="hr"></div>
+        <ul>
+          <li>Exclusive use of P01 or P02 for the day</li>
+          <li>Ideal for deep work, calls, or meetings</li>
+          <li>Front desk check-in with code</li>
+        </ul>
+        <div class="hr"></div>
+        <a class="btn btn-primary" href="booking.html">Book Private Space</a>
+      </div>
+
+      <div class="card">
+        <h2>Rules & policies</h2>
+        <p class="meta">Short, clear rules help operations. Edit these to match your reality.</p>
+        <div class="hr"></div>
+        <ul>
+          <li>Booking code is required for entry</li>
+          <li>One code = one booking (do not share)</li>
+          <li>No double-booking: once P01/P02 is booked, it becomes unavailable</li>
+          <li>Refunds/reschedule policy: (add your terms)</li>
+        </ul>
+        <div class="hr"></div>
+        <a class="btn btn-outline" href="faq.html">Read FAQs</a>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="card" style="margin-top:18px">
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between">
+        <div>
+          <h2 style="margin:0 0 6px">Ready to book?</h2>
+          <div class="sub">Choose a space, pay online, receive your code instantly.</div>
+        </div>
+        <a class="btn btn-primary" href="booking.html">Book now</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="cols">
+        <div>
+          <b>ZöD Hub</b><br />
+          <span>Focused workspace • Verified access • Simple booking</span>
+        </div>
+        <div>
+          <b>Pages</b><br />
+          <a href="booking.html">Book</a><br />
+          <a href="location.html">Location</a><br />
+          <a href="faq.html">FAQs</a>
+        </div>
+        <div>
+          <b>Contact</b><br />
+          <span>Email: admin@zodstudio.com</span><br />
+          <span>Phone/WhatsApp: (add)</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <meta name="description" content="Find ZöD Hub, view opening hours, get directions, and contact the team." />
+<title>Location — ZöD Hub</title>
+  <link rel="icon" href="favicon.ico" />
+  <link rel="canonical" href="https://zodhub.co/location.html" />
+  <meta property="og:site_name" content="ZöD Hub" />
+  <meta property="og:title" content="Location — ZöD Hub" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://zodhub.co/location.html" />
+<style>
+    :root{
+      --bg:#fbfbf8;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --line:#e5e7eb;
+      --accent:#0b3b89;
+      --radius:18px;
+      --shadow:0 10px 28px rgba(2,6,23,.08);
+      --shadow2:0 6px 16px rgba(2,6,23,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit; text-decoration:none}
+
+    .nav{
+      position:sticky; top:0; z-index:10;
+      background:rgba(251,251,248,.85);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .container{max-width:1100px; margin:0 auto; padding:18px}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; gap:12px}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900}
+    .mark{width:34px; height:34px; border-radius:12px; background:linear-gradient(135deg,var(--accent),#0ea5e9); box-shadow:var(--shadow2)}
+    .nav-links{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .nav-links a{padding:10px 10px; border-radius:12px; color:var(--muted); font-weight:800}
+    .nav-links a:hover{background:#fff; color:var(--text); box-shadow:var(--shadow2)}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:12px 16px; border-radius:14px;
+      font-weight:900;
+      border:1px solid transparent;
+      cursor:pointer;
+    }
+    .btn-primary{background:var(--accent); color:#fff; box-shadow:var(--shadow2)}
+    .btn-primary:hover{filter:brightness(.96)}
+    .btn-outline{background:transparent; border-color:var(--line); color:var(--text)}
+    .btn-outline:hover{background:#fff; box-shadow:var(--shadow2)}
+
+    .page-head{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+      margin:10px 0 12px;
+    }
+    h1{margin:0; font-size:28px}
+    .sub{color:var(--muted); font-size:13px}
+
+    .layout{
+      display:grid; grid-template-columns:1.2fr .8fr; gap:18px;
+      align-items:start;
+      margin-top:14px;
+    }
+    @media (max-width: 900px){ .layout{grid-template-columns:1fr} }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow2);
+      padding:16px;
+    }
+    .card h2{margin:0 0 8px; font-size:18px}
+    .meta{color:var(--muted); font-size:13px}
+    .hr{height:1px; background:var(--line); margin:14px 0}
+
+    .kv{
+      display:flex; justify-content:space-between; gap:12px;
+      padding:10px 0;
+      border-bottom:1px solid var(--line);
+      font-weight:900;
+    }
+    .kv span:first-child{color:var(--muted); font-weight:800}
+    .kv:last-child{border-bottom:none}
+
+    .badge{
+      display:inline-flex; align-items:center;
+      padding:6px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--muted);
+    }
+    .note{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:12px;
+      color:var(--muted);
+    }
+
+    .map{
+      border:1px dashed var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
+      min-height:360px;
+    }
+    iframe{width:100%; height:360px; border:0}
+
+    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    @media (max-width: 700px){ .grid2{grid-template-columns:1fr} }
+
+    label{font-weight:900; font-size:13px}
+    input, textarea{
+      width:100%;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      font:inherit;
+    }
+    textarea{min-height:120px; resize:vertical}
+
+    .footer{
+      border-top:1px solid var(--line);
+      margin-top:26px;
+      padding:18px 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .footer .cols{display:grid; grid-template-columns:2fr 1fr 1fr; gap:16px}
+    @media (max-width:900px){.footer .cols{grid-template-columns:1fr}}
+    .footer a{color:var(--muted); font-weight:800}
+    .footer a:hover{color:var(--text)}
+  
+/* ===== NAVBAR: consistent CTA (BOOK NOW) ===== */
+/* Only non-button nav links get the hover tile */
+.nav-links a:not(.btn):hover{
+  background:#fff;
+  color:var(--text);
+  box-shadow:var(--shadow2);
+  opacity:1;
+}
+/* BOOK NOW stays blue + white always */
+.nav-links a.btn.btn-primary,
+.nav-links a.btn.btn-primary:visited{
+  background: var(--accent);
+  color:#fff;
+  opacity:1;
+  filter:none;
+}
+.nav-links a.btn.btn-primary:hover,
+.nav-links a.btn.btn-primary:focus{
+  background: var(--accent);
+  color:#fff;
+  opacity:1;
+  filter:none;
+  box-shadow: var(--shadow2);
+}
+
+</style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span class="mark"></span><span>ZöD Hub</span></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="faq.html">FAQs</a>
+        <a href="location.html#contact">Contact</a>
+        <a class="btn btn-primary" href="booking.html">BOOK NOW</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- HEADER -->
+    <div class="page-head">
+      <div>
+        <h1>Location</h1>
+        <div class="sub">Find ZöD Hub, view opening hours, and get directions.</div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <a class="btn btn-outline" href="#contact">Contact</a>
+        <a class="btn btn-primary" id="directionsBtn" href="#" target="_blank" rel="noopener">Get directions</a>
+      </div>
+    </div>
+
+    <section class="layout">
+      <!-- LEFT: MAP + INFO -->
+      <div class="card">
+        <h2>Map</h2>
+        <p class="meta"></p>
+
+        <div class="hr"></div>
+
+        <div class="map">
+          <!-- Replace the src with your real Google Maps embed link -->
+          <iframe
+            id="mapFrame"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=London&output=embed">
+          </iframe>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="note">
+          <b style="font-size:13px">Arrival note</b><br />
+          <span class="meta">Please check in at the front desk using your booking code or QR code.</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: DETAILS -->
+      <aside class="card">
+        <h2>Visit details</h2>
+        <div class="hr"></div>
+
+        <div class="kv">
+          <span>Address</span>
+          <span id="addrText">Add your address</span>
+        </div>
+
+        <div class="kv">
+          <span>Hours</span>
+          <span>Mon–Sat: 9:00–18:00</span>
+        </div>
+
+        <div class="kv">
+          <span>Phone</span>
+          <span>+44 (add)</span>
+        </div>
+
+        <div class="kv">
+          <span>Email</span>
+          <span>admin@zodstudio.com</span>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="note">
+          <b style="font-size:13px">Parking / transport</b><br />
+          <span class="meta">
+            Add a short note about parking availability, nearby bus stops, or train stations.
+          </span>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="note">
+          <span class="badge">Tip</span>
+          <span class="meta">You can save this page on your phone for quick directions.</span>
+        </div>
+      </aside>
+    </section>
+
+    <!-- CONTACT -->
+    <div class="page-head" style="margin-top:22px">
+      <div>
+        <h1 id="contact">Contact</h1>
+        <div class="sub">Send a message. We’ll respond as soon as possible.</div>
+      </div>
+    </div>
+
+    <section class="card">
+      <h2>Send a message</h2>
+      <p class="meta">For now, messages open in your email app so you can send directly to our team.</p>
+
+      <div class="hr"></div>
+
+      <form onsubmit="return false;">
+        <div class="grid2">
+          <div>
+            <label for="cName">Full name</label>
+            <input id="cName" type="text" placeholder="Your name" />
+          </div>
+          <div>
+            <label for="cEmail">Email</label>
+            <input id="cEmail" type="email" placeholder="you@email.com" />
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label for="cMsg">Message</label>
+          <textarea id="cMsg" placeholder="Type your message..."></textarea>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px">
+          <button class="btn btn-primary" id="sendBtn" type="button">Send message</button>
+          <a class="btn btn-outline" id="mailtoBtn" href="#">Email instead</a>
+        </div>
+
+        <p class="meta" style="margin-top:10px">
+          
+        </p>
+      </form>
+    </section>
+
+    <footer class="footer">
+      <div class="cols">
+        <div>
+          <b>ZöD Hub</b><br />
+          <span>Focused workspace • Verified access • Simple booking</span>
+        </div>
+        <div>
+          <b>Pages</b><br />
+          <a href="booking.html">Book</a><br />
+          <a href="pricing.html">Pricing</a><br />
+          <a href="faq.html">FAQs</a>
+        </div>
+        <div>
+          <b>Policies</b><br />
+          <span>Terms • Privacy • Refunds</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Replace this with your real address when ready:
+    const ADDRESS = "ZöD Hub, London, United Kingdom"; // change
+    const EMAIL = "admin@zodstudio.com";
+
+    const addrText = document.getElementById("addrText");
+    const directionsBtn = document.getElementById("directionsBtn");
+    const mapFrame = document.getElementById("mapFrame");
+
+    addrText.textContent = ADDRESS;
+
+    // Directions link (Google Maps)
+    const mapsQuery = encodeURIComponent(ADDRESS);
+    directionsBtn.href = "https://www.google.com/maps/dir/?api=1&destination=" + mapsQuery;
+
+    // Map embed (simple query embed)
+    mapFrame.src = "https://www.google.com/maps?q=" + mapsQuery + "&output=embed";
+
+    // Contact form actions (demo + mailto fallback)
+    const sendBtn = document.getElementById("sendBtn");
+    const mailtoBtn = document.getElementById("mailtoBtn");
+
+    function buildMailto(){
+      const name = document.getElementById("cName").value.trim();
+      const from = document.getElementById("cEmail").value.trim();
+      const msg  = document.getElementById("cMsg").value.trim();
+
+      const subject = encodeURIComponent("ZöD Hub — Contact message");
+      const body = encodeURIComponent(
+`Name: ${name}
+Email: ${from}
+
+Message:
+${msg}`
+      );
+
+      return `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    }
+
+    mailtoBtn.addEventListener("click", (e) => {
+      mailtoBtn.href = buildMailto();
+    });
+
+    sendBtn.addEventListener("click", () => {
+      const name = document.getElementById("cName").value.trim();
+      const from = document.getElementById("cEmail").value.trim();
+      const msg  = document.getElementById("cMsg").value.trim();
+      if(!name || !from || !msg){
+        alert("Please fill in your name, email, and message.");
+        return;
+      }
+      window.location.href = buildMailto();
+    });
+const from = document.getElementById("cEmail").value.trim();
+      const msg  = document.getElementById("cMsg").value.trim();
+      if(!name || !from || !msg){
+        alert("Please fill in your name, email, and message.");
+        return;
+      }
+      alert("Message sent (demo). For real sending, connect this to your backend/email service.");
+    });
+  </script>
+</body>
+</html>

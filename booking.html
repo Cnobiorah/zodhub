@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book — ZöD Hub</title>
+  <style>
+    :root{
+      --bg:#fbfbf8;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --line:#e5e7eb;
+      --accent:#0b3b89;
+      --radius:18px;
+      --shadow:0 10px 28px rgba(2,6,23,.08);
+      --shadow2:0 6px 16px rgba(2,6,23,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit; text-decoration:none}
+
+    .nav{
+      position:sticky; top:0; z-index:10;
+      background:rgba(251,251,248,.85);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .container{max-width:1100px; margin:0 auto; padding:18px}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; gap:12px}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900}
+    .mark{width:34px; height:34px; border-radius:12px; background:linear-gradient(135deg,var(--accent),#0ea5e9); box-shadow:var(--shadow2)}
+    .nav-links{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .nav-links a{padding:10px 10px; border-radius:12px; color:var(--muted); font-weight:700}
+    .nav-links a:hover{background:#fff; color:var(--text); box-shadow:var(--shadow2)}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:12px 16px; border-radius:14px;
+      font-weight:800;
+      border:1px solid transparent;
+      cursor:pointer;
+    }
+    .btn-primary{background:var(--accent); color:#fff; box-shadow:var(--shadow2)}
+    .btn-primary:hover{filter:brightness(.96)}
+    .btn-outline{background:transparent; border-color:var(--line); color:var(--text)}
+    .btn-outline:hover{background:#fff; box-shadow:var(--shadow2)}
+    .btn:disabled{opacity:.5; cursor:not-allowed}
+
+    .page-head{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+      margin:10px 0 12px;
+    }
+    h1{margin:0; font-size:28px}
+    .sub{color:var(--muted); font-size:13px}
+
+    .tabs{
+      display:flex; gap:10px; flex-wrap:wrap;
+      background:#fff; border:1px solid var(--line); border-radius:16px;
+      padding:8px; box-shadow:var(--shadow2);
+    }
+    .tab{
+      padding:10px 12px; border-radius:14px; font-weight:900;
+      border:1px solid transparent;
+      color:var(--muted);
+      background:transparent;
+      cursor:pointer;
+    }
+    .tab.active{
+      background:rgba(11,59,137,.08);
+      border-color:rgba(11,59,137,.25);
+      color:var(--text);
+    }
+
+    .layout{
+      display:grid; grid-template-columns:1.35fr .65fr; gap:18px;
+      align-items:start;
+      margin-top:14px;
+    }
+    @media (max-width: 900px){ .layout{grid-template-columns:1fr} }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow2);
+      padding:16px;
+    }
+    .card h2{margin:0 0 8px; font-size:18px}
+    .meta{color:var(--muted); font-size:13px}
+    .hr{height:1px; background:var(--line); margin:14px 0}
+
+    .form{display:grid; gap:12px}
+    label{font-weight:900; font-size:13px}
+    input, select{
+      width:100%;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      font:inherit;
+    }
+    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    @media (max-width: 700px){ .grid2{grid-template-columns:1fr} }
+
+    .notice{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:12px;
+    }
+    .badge{
+      display:inline-flex; align-items:center;
+      padding:6px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+    .ok{border-color:#bbf7d0; background:#f0fdf4; color:#166534}
+    .no{border-color:#fecaca; background:#fef2f2; color:#991b1b}
+    .warn{border-color:#fde68a; background:#fffbeb; color:#92400e}
+
+    .pick{
+      display:grid; gap:10px;
+      border:1px dashed var(--line);
+      border-radius:16px;
+      padding:12px;
+      background:#fff;
+    }
+    .pick .row{display:flex; gap:10px; flex-wrap:wrap}
+    .choice{
+      flex:1;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fff;
+      cursor:pointer;
+      font-weight:900;
+    }
+    .choice:hover{box-shadow:var(--shadow2)}
+    .choice[aria-disabled="true"]{opacity:.55; cursor:not-allowed}
+    .sticky{
+      position:sticky; top:88px;
+    }
+    .summary-line{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin:8px 0;
+      font-weight:800;
+    }
+    .small{font-size:12px; color:var(--muted)}
+  
+/* ===== NAVBAR: consistent CTA (BOOK NOW) ===== */
+/* Only non-button nav links get the hover tile */
+.nav-links a:not(.btn):hover{
+  background:#fff;
+  color:var(--text);
+  box-shadow:var(--shadow2);
+  opacity:1;
+}
+/* BOOK NOW stays blue + white always */
+.nav-links a.btn.btn-primary,
+.nav-links a.btn.btn-primary:visited{
+  background: var(--accent);
+  color:#fff;
+  opacity:1;
+  filter:none;
+}
+.nav-links a.btn.btn-primary:hover,
+.nav-links a.btn.btn-primary:focus{
+  background: var(--accent);
+  color:#fff;
+  opacity:1;
+  filter:none;
+  box-shadow: var(--shadow2);
+}
+
+</style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span class="mark"></span><span>ZöD Hub</span></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="faq.html">FAQs</a>
+        <a href="location.html#contact">Contact</a>
+        <a class="btn btn-primary" href="booking.html">BOOK NOW</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- HEADER -->
+    <div class="page-head">
+      <div>
+        <h1>Book a Workspace</h1>
+        <div class="sub"></div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Booking type">
+        <button class="tab active" id="tab-general" role="tab" aria-selected="true">General Space</button>
+        <button class="tab" id="tab-private" role="tab" aria-selected="false">Private Space</button>
+      </div>
+    </div>
+
+    <!-- LAYOUT -->
+    <section class="layout">
+      <!-- LEFT: FORM -->
+      <div class="card" id="panel-general">
+        <h2>General Workstation Pods (4-in-1 × 3)</h2>
+        <p class="meta"></p>
+
+        <div class="hr"></div>
+
+        <form class="form" onsubmit="return false;">
+          <div class="grid2">
+            <div>
+              <label for="genPod">Pod</label>
+              <select id="genPod">
+                <option value="G01">G01 (4 seats)</option>
+                <option value="G02">G02 (4 seats)</option>
+                <option value="G03">G03 (4 seats)</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="genPackage">Package</label>
+              <select id="genPackage">
+                <option value="GEN_DAILY">Daily</option>
+                <option value="GEN_WEEKLY">Weekly</option>
+                <option value="GEN_MONTHLY">Monthly</option>
+                <option value="GEN_YEARLY">Yearly</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div>
+              <label for="genStart">Start date</label>
+              <input id="genStart" type="date" />
+            </div>
+            <div>
+              <label for="genSeatInfo">Seat assignment</label>
+              <input id="genSeatInfo" type="text" value="Seat assigned at front desk" disabled />
+            </div>
+          </div>
+
+          <div class="notice" id="genAvailability">
+            <span class="badge warn">Select a date</span>
+            <span class="meta"> Availability will appear here.</span>
+          </div>
+
+          <div class="grid2">
+            <div>
+              <label for="fullName">Full name</label>
+              <input id="fullName" type="text" placeholder="Your name" />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="you@email.com" />
+            </div>
+          </div>
+
+          <div>
+            <label for="phone">Phone (optional)</label>
+            <input id="phone" type="tel" placeholder="+44..." />
+          </div>
+
+          <button class="btn btn-primary" id="genContinue" type="button" disabled>
+            Continue to Payment
+          </button>
+
+          <div class="small"></div>
+        </form>
+      </div>
+
+      <div class="card" id="panel-private" style="display:none;">
+        <h2>Private Space (Daily)</h2>
+        <p class="meta"></p>
+
+        <div class="hr"></div>
+
+        <form class="form" onsubmit="return false;">
+          <div>
+            <label for="privDate">Date</label>
+            <input id="privDate" type="date" />
+          </div>
+
+          <div class="pick">
+            <b style="font-size:13px">Choose a private space</b>
+            <div class="meta"></div>
+
+            <div class="row">
+              <div class="choice" id="pickP01" role="button" tabindex="0" aria-disabled="true">
+                <span>P01</span>
+                <span class="badge warn" id="p01Badge">Select date</span>
+              </div>
+              <div class="choice" id="pickP02" role="button" tabindex="0" aria-disabled="true">
+                <span>P02</span>
+                <span class="badge warn" id="p02Badge">Select date</span>
+              </div>
+            </div>
+
+            <div class="meta">Chosen: <b id="privChosen">—</b></div>
+          </div>
+
+          <div class="grid2">
+            <div>
+              <label for="privName">Full name</label>
+              <input id="privName" type="text" placeholder="Your name" />
+            </div>
+            <div>
+              <label for="privEmail">Email</label>
+              <input id="privEmail" type="email" placeholder="you@email.com" />
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="privContinue" type="button" disabled>
+            Continue to Payment
+          </button>
+
+          <div class="small"></div>
+        </form>
+      </div>
+
+      <!-- RIGHT: SUMMARY -->
+      <aside class="card sticky">
+        <h2>Booking Summary</h2>
+        <p class="meta" id="summaryType">—</p>
+
+        <div class="hr"></div>
+
+        <div class="summary-line">
+          <span>Space</span>
+          <span id="summarySpace">—</span>
+        </div>
+        <div class="summary-line">
+          <span>Dates</span>
+          <span id="summaryDates">—</span>
+        </div>
+        <div class="summary-line">
+          <span>Package</span>
+          <span id="summaryPackage">—</span>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="summary-line" style="font-size:18px">
+          <span>Total</span>
+          <span id="summaryTotal">—</span>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="notice">
+          <b style="font-size:13px">Entry</b><br />
+          <span class="meta"></span>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- Supabase browser client (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+    // === Supabase init (paste your keys) ===
+    const SUPABASE_URL = "https://eaunslmvqezqlukmuutf.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhdW5zbG12cWV6cWx1a211dXRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY3NTA2NDcsImV4cCI6MjA4MjMyNjY0N30.JMlH4-tfDuhx8DwmJSSbHbbV5tGIkKYlIlYwxO0UND8";
+    
+const hasSupabaseKeys = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 20;
+    const sb = hasSupabaseKeys ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+    async function getSpaceIdByCode(code){
+      const { data, error } = await sb
+        .from("spaces").select("id").eq("code", code).eq("is_active", true).single();
+      if(error) throw error;
+      return data.id;
+    }
+
+    function mapPackage(pkg){
+      const map = {
+        GEN_DAILY: "daily",
+        GEN_WEEKLY: "weekly",
+        GEN_MONTHLY: "monthly",
+        GEN_YEARLY: "yearly",
+        PRI_DAILY: "daily",
+        daily: "daily",
+        weekly: "weekly",
+        monthly: "monthly",
+        yearly: "yearly"
+      };
+      return map[pkg] || "daily";
+    }
+
+    function makeBookingCode(){
+      return "ZDH-" + crypto.randomUUID().slice(0,8).toUpperCase();
+    }
+
+
+    // ===== Pricing placeholders (edit later) =====
+    const CURRENCY = "NGN";
+    const PRICES = {
+      // Prices are in NGN
+      GEN_DAILY: 12000,
+      GEN_WEEKLY: 50000,
+      GEN_MONTHLY: 160000,
+      GEN_YEARLY: 1200000,
+      PRIV_DAILY: 35000
+    };
+
+    // ===== Availability (production-only) =====
+// This page requires a working Supabase connection and a real availability source.
+// Expected RPC: get_availability_for_date(p_date text) returning rows like:
+// { space_code: 'G01', seats_left: 3 } and for private spaces { space_code: 'P01', seats_left: 1 }.
+async function getAvailabilityForDate(dateStr){
+  if(!dateStr) return [];
+  if(!sb) throw new Error("Booking service is not configured.");
+  const { data, error } = await sb.rpc("get_availability_for_date", { p_date: dateStr });
+  if(error) throw error;
+  return Array.isArray(data) ? data : [];
+}
+async function seatsLeft(spaceCode, dateStr){
+  if (!dateStr) return null;
+
+  const { data, error } = await sb
+    .rpc("get_availability_for_date", { p_date: dateStr });
+
+  if (error) {
+    console.error("get_availability_for_date error:", error);
+    return null;
+  }
+
+  const row = (data || []).find(
+    r => String(r.space_code).toUpperCase() === String(spaceCode).toUpperCase()
+  );
+
+  return row ? Number(row.seats_left) : 0;
+}
+
+
+    function money(n){
+      return new Intl.NumberFormat("en-NG", { style:"currency", currency:CURRENCY }).format(n);
+    }
+
+    // Tabs
+    const tabGeneral = document.getElementById("tab-general");
+    const tabPrivate = document.getElementById("tab-private");
+    const panelGeneral = document.getElementById("panel-general");
+    const panelPrivate = document.getElementById("panel-private");
+
+    function showGeneral(){
+      tabGeneral.classList.add("active");
+      tabPrivate.classList.remove("active");
+      tabGeneral.setAttribute("aria-selected","true");
+      tabPrivate.setAttribute("aria-selected","false");
+      panelGeneral.style.display = "";
+      panelPrivate.style.display = "none";
+      syncSummaryFromGeneral();
+    }
+    function showPrivate(){
+      tabPrivate.classList.add("active");
+      tabGeneral.classList.remove("active");
+      tabPrivate.setAttribute("aria-selected","true");
+      tabGeneral.setAttribute("aria-selected","false");
+      panelPrivate.style.display = "";
+      panelGeneral.style.display = "none";
+      syncSummaryFromPrivate();
+    }
+    tabGeneral.addEventListener("click", showGeneral);
+    tabPrivate.addEventListener("click", showPrivate);
+
+    // Summary elements
+    const summaryType = document.getElementById("summaryType");
+    const summarySpace = document.getElementById("summarySpace");
+    const summaryDates = document.getElementById("summaryDates");
+    const summaryPackage = document.getElementById("summaryPackage");
+    const summaryTotal = document.getElementById("summaryTotal");
+
+    // -------- General logic
+    const genPod = document.getElementById("genPod");
+    const genPackage = document.getElementById("genPackage");
+    const genStart = document.getElementById("genStart");
+    const genAvailability = document.getElementById("genAvailability");
+    const genContinue = document.getElementById("genContinue");
+
+    function syncSummaryFromGeneral(){
+      const pkg = genPackage.value;
+      const pkgLabel = genPackage.options[genPackage.selectedIndex].text;
+      const start = genStart.value;
+
+      summaryType.textContent = "General Space";
+      const pod = genPod.value;
+      summarySpace.textContent = `General Pod ${pod} (4 seats)`;
+      summaryDates.textContent = start ? start : "—";
+      summaryPackage.textContent = pkgLabel;
+      summaryTotal.textContent = money(PRICES[pkg] || 0);
+    }
+
+   async function refreshGeneral() {
+  syncSummaryFromGeneral();
+
+  const start = genStart.value;
+  const pod = genPod.value;
+
+  if (!start) {
+    genAvailability.innerHTML = `<span class="badge warn">Select a date</span>`;
+    genContinue.disabled = true;
+    return;
+  }
+
+  const { data, error } = await sb.rpc("get_availability_for_date", { p_date: start });
+
+  if (error || !data) {
+    console.error("General availability error:", error);
+    genAvailability.innerHTML = `<span class="badge no">Unavailable</span>`;
+    genContinue.disabled = true;
+    return;
+  }
+
+  const row = data.find(r => r.space_code === pod);
+
+  if (!row || row.seats_left <= 0) {
+    genAvailability.innerHTML = `<span class="badge no">Fully booked</span>`;
+    genContinue.disabled = true;
+    return;
+  }
+
+  genAvailability.innerHTML =
+    `<span class="badge ok">Available</span>
+     <span class="meta"> ${row.seats_left} of 4 seats remaining in ${pod}</span>`;
+
+  genContinue.disabled = false;
+}
+
+
+    genPod.addEventListener("change", refreshGeneral);
+    genPackage.addEventListener("change", refreshGeneral);
+    genStart.addEventListener("change", refreshGeneral);
+
+    genContinue.addEventListener("click", async () => {
+  const name = document.getElementById("fullName").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+
+  if (!name || !email) {
+    alert("Please enter your full name and email.");
+    return;
+  }
+
+  const booking = {
+    type: "general",
+    space_code: genPod.value,             // "G01" / "G02" / "G03"
+    booking_date: genStart.value,         // "YYYY-MM-DD"
+    package: mapPackage(genPackage.value),// daily/weekly/monthly/yearly
+    customer: { name, email, phone }
+  };
+
+  localStorage.setItem("zodHubPending", JSON.stringify(booking));
+
+const amountNGN = Number(prices[genPackage.value] || 0);
+  if (!amountNGN) {
+    alert("Payment amount is not set.");
+    return;
+  }
+
+  const res = await fetch("https://eaunslmvqezqlukmuutf.supabase.co/functions/v1/init-paystack", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + SUPABASE_ANON_KEY
+    },
+    body: JSON.stringify({
+      email,
+      amountNGN,
+      callback_url: CALLBACK_URL,
+      booking
+    })});
+
+  const data = await res.json();
+  if (!data.authorization_url) {
+    console.log("init-paystack response:", data);
+    alert("Unable to start Paystack payment. Check console.");
+    return;
+  }
+
+  window.location.href = data.authorization_url;
+});
+
+
+    // -------- Private logic
+    const privDate = document.getElementById("privDate");
+    const pickP01 = document.getElementById("pickP01");
+    const pickP02 = document.getElementById("pickP02");
+    const p01Badge = document.getElementById("p01Badge");
+    const p02Badge = document.getElementById("p02Badge");
+    const privChosenEl = document.getElementById("privChosen");
+    const privContinue = document.getElementById("privContinue");
+
+    let privSelected = null;
+
+    function setChoiceEnabled(el, enabled){
+      el.setAttribute("aria-disabled", enabled ? "false" : "true");
+    }
+
+    function syncSummaryFromPrivate(){
+      summaryType.textContent = "Private Space";
+      summarySpace.textContent = privSelected ? `Private Space ${privSelected}` : "—";
+      summaryDates.textContent = privDate.value ? privDate.value : "—";
+      summaryPackage.textContent = "Daily";
+      summaryTotal.textContent = money(PRICES.PRIV_DAILY);
+    }
+
+    async function refreshPrivate(){
+      const d = privDate.value;
+      let p01Left = null;
+      let p02Left = null;
+      if(d){
+        try{
+          p01Left = await seatsLeft("P01", d);
+          p02Left = await seatsLeft("P02", d);
+        }catch(e){
+          p01Left = null;
+          p02Left = null;
+        }
+      }
+
+      const p01Booked = (d && p01Left !== null) ? (Number(p01Left) <= 0) : true;
+      const p02Booked = (d && p02Left !== null) ? (Number(p02Left) <= 0) : true;
+
+      if(!d){
+        setChoiceEnabled(pickP01, false);
+        setChoiceEnabled(pickP02, false);
+        p01Badge.className = "badge warn";
+        p02Badge.className = "badge warn";
+        p01Badge.textContent = "Select date";
+        p02Badge.textContent = "Select date";
+        privSelected = null;
+      } else {
+        setChoiceEnabled(pickP01, !p01Booked);
+        setChoiceEnabled(pickP02, !p02Booked);
+
+        p01Badge.className = "badge " + (p01Booked ? "no" : "ok");
+        p02Badge.className = "badge " + (p02Booked ? "no" : "ok");
+        p01Badge.textContent = p01Booked ? "Booked" : "Available";
+        p02Badge.textContent = p02Booked ? "Booked" : "Available";
+
+        // If selected becomes booked, clear it
+        if(privSelected === "P01" && p01Booked) privSelected = null;
+        if(privSelected === "P02" && p02Booked) privSelected = null;
+      }
+
+      privChosenEl.textContent = privSelected ? privSelected : "—";
+      privContinue.disabled = !(d && privSelected);
+      syncSummaryFromPrivate();
+    }
+
+    async function tryPick(spaceId){
+      const d = privDate.value;
+      if(!d) return;
+      let left = null;
+      try{ left = await seatsLeft(spaceId, d); }catch(e){ left = null; }
+      if(left === null) return;
+      if(Number(left) <= 0) return;
+      privSelected = spaceId;
+      refreshPrivate();
+    }
+
+    pickP01.addEventListener("click", () => { tryPick("P01"); });
+    pickP02.addEventListener("click", () => { tryPick("P02"); });
+    pickP01.addEventListener("keydown", (e) => { if(e.key==="Enter") tryPick("P01"); });
+    pickP02.addEventListener("keydown", (e) => { if(e.key==="Enter") tryPick("P02"); });
+
+    privDate.addEventListener("change", async () => { privSelected = null; await refreshPrivate(); });
+
+   privContinue.addEventListener("click", async () => {
+  const name = document.getElementById("privName").value.trim();
+  const email = document.getElementById("privEmail").value.trim();
+
+  if (!name || !email) {
+    alert("Please enter your full name and email.");
+    return;
+  }
+
+  const booking = {
+    type: "private",
+    space_code: privSelected,                 // P01 / P02
+    booking_date: privDate.value,             // YYYY-MM-DD
+    package: "daily",
+    customer: { name, email, phone }
+  };
+
+  localStorage.setItem("zodHubPending", JSON.stringify(booking));
+
+const amountNGN = Number(privatePriceNGN || prices.PRIVATE_DAILY || 0);
+  if (!amountNGN) {
+    alert("Payment amount is not set.");
+    return;
+  }
+
+  const res = await fetch("https://eaunslmvqezqlukmuutf.supabase.co/functions/v1/init-paystack", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + SUPABASE_ANON_KEY
+    },
+    body: JSON.stringify({
+      email,
+      amountNGN,
+      callback_url: CALLBACK_URL,
+      booking
+    })});
+
+  const data = await res.json();
+  if (!data.authorization_url) {
+    console.log("init-paystack response:", data);
+    alert("Unable to start Paystack payment. Check console.");
+    return;
+  }
+
+  window.location.href = data.authorization_url;
+});
+
+
+    // init
+
+    // ===== Production guard: disable booking if Supabase isn't configured =====
+    if(!sb){
+      genAvailability.innerHTML = `<span class="badge no">Unavailable</span> <span class="meta"> Booking service is not configured. Please set your Supabase keys.</span>`;
+      genContinue.disabled = true;
+      p01Badge.className = "badge no"; p01Badge.textContent = "Unavailable";
+      p02Badge.className = "badge no"; p02Badge.textContent = "Unavailable";
+      privContinue.disabled = true;
+    }
+
+    refreshGeneral();
+    refreshPrivate();
+    syncSummaryFromGeneral();
+  </script>
+
+  <!-- Supabase client -->
+  </body>
+</html>
