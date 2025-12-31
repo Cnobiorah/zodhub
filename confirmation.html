@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Booking Confirmed — ZöD Hub</title>
+  <!-- ✅ KEEPING YOUR OLD STYLE EXACTLY -->
   <style>
     :root{
       --bg:#fbfbf8;
@@ -84,6 +85,7 @@
     }
     .ok{border-color:#bbf7d0; background:#f0fdf4; color:#166534}
     .warn{border-color:#fde68a; background:#fffbeb; color:#92400e}
+    .no{border-color:#fecaca; background:#fef2f2; color:#991b1b}
 
     .code-box{
       display:grid; gap:8px;
@@ -113,9 +115,6 @@
       font-size:12px;
       color:var(--muted);
     }
-
-    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-    @media (max-width: 700px){ .grid2{grid-template-columns:1fr} }
 
     .kv{
       display:flex; justify-content:space-between; gap:12px;
@@ -166,35 +165,31 @@
       .card{box-shadow:none}
       .sticky{position:static}
     }
-  
-/* ===== NAVBAR: consistent CTA (BOOK NOW) ===== */
-/* Only non-button nav links get the hover tile */
-.nav-links a:not(.btn):hover{
-  background:#fff;
-  color:var(--text);
-  box-shadow:var(--shadow2);
-  opacity:1;
-}
-/* BOOK NOW stays blue + white always */
-.nav-links a.btn.btn-primary,
-.nav-links a.btn.btn-primary:visited{
-  background: var(--accent);
-  color:#fff;
-  opacity:1;
-  filter:none;
-}
-.nav-links a.btn.btn-primary:hover,
-.nav-links a.btn.btn-primary:focus{
-  background: var(--accent);
-  color:#fff;
-  opacity:1;
-  filter:none;
-  box-shadow: var(--shadow2);
-}
 
-</style>
+    /* ===== NAVBAR: consistent CTA (BOOK NOW) ===== */
+    .nav-links a:not(.btn):hover{
+      background:#fff;
+      color:var(--text);
+      box-shadow:var(--shadow2);
+      opacity:1;
+    }
+    .nav-links a.btn.btn-primary,
+    .nav-links a.btn.btn-primary:visited{
+      background: var(--accent);
+      color:#fff;
+      opacity:1;
+      filter:none;
+    }
+    .nav-links a.btn.btn-primary:hover,
+    .nav-links a.btn.btn-primary:focus{
+      background: var(--accent);
+      color:#fff;
+      opacity:1;
+      filter:none;
+      box-shadow: var(--shadow2);
+    }
+  </style>
 </head>
-
 <body>
   <!-- NAV -->
   <div class="nav">
@@ -213,18 +208,18 @@
     <!-- HEADER -->
     <div class="page-head">
       <div>
-        <h1>✅ Booking Confirmed</h1>
+        <h1 id="headline">✅ Booking Confirmed</h1>
         <div class="sub" id="subline">Your booking details are ready. Present your code at the front desk.</div>
       </div>
       <button class="btn btn-outline" onclick="window.print()">Print / Save</button>
     </div>
 
     <section class="layout">
-      <!-- LEFT: MAIN CONFIRMATION -->
+      <!-- LEFT -->
       <div class="card">
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between">
           <div>
-            <span class="badge ok">Payment successful</span>
+            <span class="badge ok" id="payBadge">Payment successful</span>
             <span class="badge warn" id="validityBadge" style="margin-left:8px">Valid for your booking date</span>
           </div>
           <div class="pill" id="createdAtPill">Created: —</div>
@@ -269,12 +264,12 @@
         <!-- Actions -->
         <div class="actions" style="display:flex; gap:10px; flex-wrap:wrap">
           <a class="btn btn-primary" href="booking.html">Book another space</a>
-          <button class="btn btn-outline" id="emailBtn" type="button">Email me this confirmation (demo)</button>
+          <button class="btn btn-outline" id="emailBtn" type="button">Email me this confirmation</button>
           <button class="btn btn-outline" id="clearBtn" type="button">Clear saved confirmation</button>
         </div>
       </div>
 
-      <!-- RIGHT: DETAILS -->
+      <!-- RIGHT -->
       <aside class="card sticky">
         <b style="font-size:13px">Booking details</b>
         <div class="hr"></div>
@@ -286,7 +281,7 @@
         <div class="kv"><span>Package</span><span id="dPackage">—</span></div>
         <div class="kv"><span>Total</span><span id="dTotal">—</span></div>
         <div class="kv"><span>Date(s)</span><span id="dDates">—</span></div>
-        <div class="kv"><span>Status</span><span><span class="badge ok">Confirmed</span></span></div>
+        <div class="kv"><span>Status</span><span id="dStatus">—</span></div>
 
         <div class="hr"></div>
 
@@ -300,34 +295,36 @@
 
   <div class="toast" id="toast">Copied</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 
   <script>
     // ============================
-    // PRODUCTION CONFIRMATION LOGIC
-    // - Never creates bookings in the browser
-    // - Only:
-    //   (a) verify payment via Edge Function
-    //   (b) load booking details by booking_code (RPC)
+    // OPTION B (NEW DB) CONFIRMATION LOGIC
+    // - UI stays identical to your old page
+    // - Works with tables: bookings, resources, packages
+    // - Paystack redirects here with ?reference=xxxx
+    // - We call Edge Function paystack-verify to mark booking paid
+    // - Then load booking details by booking_ref
     // ============================
 
-    const SUPABASE_URL = "https://eaunslmvqezqlukmuutf.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhdW5zbG12cWV6cWx1a211dXRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY3NTA2NDcsImV4cCI6MjA4MjMyNjY0N30.JMlH4-tfDuhx8DwmJSSbHbbV5tGIkKYlIlYwxO0UND8";
-    const hasSupabaseKeys = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 20;
+    // ✅ Put your real values (anon key is safe in browser)
+    const SUPABASE_URL = "https://dzazdrpgedrrcnuzgjjc.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6YXpkcnBnZWRycmNudXpnampjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMjUxOTQsImV4cCI6MjA4MjcwMTE5NH0.8ZRnOiGtyfi5ibmTbKLROnQ4PqBIDvDfeH-mWGUQy_M";
 
+    // ✅ Your Edge Function endpoint (change name if your function is different)
+    const FUNCTIONS_BASE = "https://dzazdrpgedrrcnuzgjjc.functions.supabase.co";
+    const VERIFY_FN = "paystack-verify";
+
+    const hasSupabaseKeys = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 20;
     const sb = (hasSupabaseKeys && window.supabase)
       ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
       : null;
 
-    const VERIFY_FN_URL = `${SUPABASE_URL}/functions/v1/verify-paystack`;
-
-    // Query params
     const qs = new URLSearchParams(location.search);
-    const codeParam = qs.get("code");
-    const refParam = qs.get("reference") || qs.get("ref");
+    const reference = qs.get("reference") || qs.get("ref"); // Paystack uses ?reference=
+    const bookingRefDirect = qs.get("code"); // we also support confirmation.html?code=ZOD-...
 
-    // Helpers
     const el = (id) => document.getElementById(id);
     const toast = el("toast");
 
@@ -336,15 +333,37 @@
       toast.style.display = "block";
       setTimeout(() => toast.style.display = "none", 1500);
     }
-
     function safeText(v){ return (v === undefined || v === null || v === "") ? "—" : String(v); }
-
     const moneyNGN = (n) =>
       new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" })
         .format(Number(n || 0));
+		
+		// QR: draw into <canvas id="qrCanvas">
+function renderQRToCanvas(text){
+  const canvas = document.getElementById("qrCanvas");
+  if (!canvas || !text) return;
 
-    function setLoadingState(message){
-      el("subline").textContent = message || "Loading confirmation…";
+  if (typeof QRCode === "undefined") {
+    console.warn("QRCode library not loaded");
+    return;
+  }
+
+  QRCode.toCanvas(
+    canvas,
+    text,
+    { width: 180, margin: 1 },
+    (error) => { if (error) console.error("QR error:", error); }
+  );
+}
+
+
+    function setBadState(title, message){
+      el("headline").textContent = title || "Verification error";
+      el("subline").textContent = message || "Please contact support.";
+
+      el("payBadge").className = "badge no";
+      el("payBadge").textContent = "Not confirmed";
+
       el("bookingCode").textContent = "—";
       el("createdAtPill").textContent = "Created: —";
       el("copyBtn").disabled = true;
@@ -356,253 +375,205 @@
       el("dPackage").textContent = "—";
       el("dTotal").textContent = "—";
       el("dDates").textContent = "—";
+      el("dStatus").innerHTML = `<span class="badge no">Failed</span>`;
 
       // Clear QR
       const canvas = el("qrCanvas");
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
-    function setEmptyState(message){
-      setLoadingState(message || "No confirmation found. Please make a booking first.");
-      el("subline").textContent = message || "No confirmation found. Please make a booking first.";
-      el("emailBtn").disabled = true;
-      el("emailBtn").textContent = "Email me this confirmation";
     }
 
-    async function verifyPaystack(reference){
-      const res = await fetch(VERIFY_FN_URL, {
+    async function verifyPaystack(ref){
+      const r = await fetch(`${FUNCTIONS_BASE}/${VERIFY_FN}`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + SUPABASE_ANON_KEY,
-          "apikey": SUPABASE_ANON_KEY
-        },
-        body: JSON.stringify({ reference })
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+      "apikey": SUPABASE_ANON_KEY
+    },
+        body: JSON.stringify({ reference: ref })
       });
-      return await res.json();
+      const j = await r.json();
+      if(!r.ok) throw new Error(j.error || "Verification failed");
+      return j; // expected: { ok:true, booking_ref, reference, paidAmountNgn }
     }
 
-    // RPC: get_booking_by_code(p_code text)
-    async function loadFromSupabaseByCode(code){
-      if(!sb) return null;
+    async function loadBookingByRef(booking_ref){
+      // Requires a SELECT policy that allows reading bookings.
+      // (You can later tighten this; for now it’s fine for launch.)
+      const { data, error } = await sb
+        .from("bookings")
+        .select(`
+          booking_ref,
+          customer_name,
+          customer_email,
+          start_date,
+          end_date,
+          seats_qty,
+          amount_ngn,
+          status,
+          created_at,
+          paystack_reference,
+          resources:resource_id ( code, name, type ),
+          packages:package_id ( name, duration_days )
+        `)
+        .eq("booking_ref", booking_ref)
+        .single();
 
-      const { data: rows, error } = await sb.rpc("get_booking_by_code", { p_code: code });
-      if(error || !rows) return null;
-
-      const booking = Array.isArray(rows) ? rows[0] : rows;
-      if(!booking) return null;
-
-      const spaceCode = booking.space_code || booking.spaceCode || null;
-      const spaceTypeRaw = booking.space_type || booking.spaceType || null;
-      const spaceName = booking.space_name || booking.spaceName || null;
-
-      const inferredType =
-        spaceTypeRaw ? String(spaceTypeRaw).toLowerCase()
-        : (spaceCode && String(spaceCode).toUpperCase().startsWith("G") ? "general" : "private");
-
-      const start = booking.start_date || booking.startDate || booking.booking_date || booking.bookingDate || null;
-      const end = booking.end_date || booking.endDate || booking.booking_date || booking.bookingDate || null;
-
-      // If your RPC returns total/amount, use it; otherwise keep —
-      const total = booking.total_amount || booking.amount || booking.total || null;
-
-      return {
-        bookingCode: booking.booking_code || booking.bookingCode || null,
-        createdAt: booking.created_at || booking.createdAt || null,
-        type: inferredType,
-        spaceCode: spaceCode,
-        spaceName: spaceName,
-        package: booking.package || null,
-        startDate: start,
-        endDate: end,
-        total: total,
-        customer: {
-          name: booking.customer_name || booking.customerName || null,
-          email: booking.customer_email || booking.customerEmail || null,
-          phone: booking.customer_phone || booking.customerPhone || null
-        }
-      };
+      if(error) throw error;
+      return data;
     }
 
-    async function loadQrLibOnce(){
-  if (window.QRCode && typeof window.QRCode.toCanvas === "function") return true;
-  if (window.__zodQrLoading) return window.__zodQrLoading;
-
-  window.__zodQrLoading = new Promise((resolve) => {
-    const s = document.createElement("script");
-    s.src = "https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js";
-    s.async = true;
-    s.onload = () => resolve(true);
-    s.onerror = () => resolve(false);
-    document.head.appendChild(s);
-  });
-
-  return window.__zodQrLoading;
-}
-
-async function drawRealQR(text){
-  const canvas = el("qrCanvas");
-  if(!canvas || !text) return;
-
-  // Ensure QR library exists; do not throw if blocked
-  const ok = await loadQrLibOnce();
-  if (!ok || !window.QRCode || typeof window.QRCode.toCanvas !== "function") {
-    console.warn("QRCode library not loaded");
-    const ctx = canvas.getContext("2d");
-    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-    return;
-  }
-
-  try{
-    window.QRCode.toCanvas(canvas, text, { width: 180, margin: 1 }, (err) => {
-      if(err) console.error("QR error:", err);
-    });
-  }catch(e){
-    console.warn("QR render failed:", e);
-  }
-}catch(e){
-        console.warn("QR render failed:", e);
-      }
-    }
-
-    function renderUI(data){
-      if(!data){
-        setEmptyState("No confirmation found. Please make a booking first.");
-        return;
+    function render(booking){
+      // badges / header
+      const status = String(booking.status || "").toLowerCase();
+      if(status === "paid"){
+        el("payBadge").className = "badge ok";
+        el("payBadge").textContent = "Payment successful";
+        el("dStatus").innerHTML = `<span class="badge ok">Confirmed</span>`;
+      }else{
+        el("payBadge").className = "badge warn";
+        el("payBadge").textContent = "Pending";
+        el("dStatus").innerHTML = `<span class="badge warn">Pending</span>`;
       }
 
-      // code
-      el("bookingCode").textContent = safeText(data.bookingCode);
-      el("copyBtn").disabled = !data.bookingCode;
+      el("headline").textContent = status === "paid" ? "✅ Booking Confirmed" : "⏳ Booking Pending";
+      el("subline").textContent = status === "paid"
+        ? "Your booking details are ready. Present your code at the front desk."
+        : "Your booking is created but not yet confirmed. If you paid, refresh this page.";
 
-      // created at
-      const created = data.createdAt ? new Date(data.createdAt) : null;
+      // booking code (use booking_ref as the code)
+     // booking code (use booking_ref as the code)
+el("bookingCode").textContent = safeText(booking.booking_ref);
+el("copyBtn").disabled = !booking.booking_ref;
+
+// ✅ QR (only when code exists)
+if (booking.booking_ref) renderQRToCanvas(booking.booking_ref);
+
+
+      // created at pill
+      const created = booking.created_at ? new Date(booking.created_at) : null;
       el("createdAtPill").textContent = "Created: " + (created ? created.toLocaleString() : "—");
 
-      // real QR
-      drawRealQR(data.bookingCode || "ZODHUB");
+      // details right
+      el("dName").textContent = safeText(booking.customer_name);
+      el("dEmail").textContent = safeText(booking.customer_email);
 
-      // details
-      el("dName").textContent = safeText(data.customer?.name);
-      el("dEmail").textContent = safeText(data.customer?.email);
+      const res = booking.resources || {};
+      const pkg = booking.packages || {};
 
-      const pkgText = data.package ? String(data.package).replace(/^GEN_/i,"").replace(/^PRIV_/i,"") : null;
-
-      if(String(data.type).toLowerCase() === "general"){
+      const type = (res.type || "").toLowerCase();
+      if(type === "general"){
         el("dType").textContent = "General Space";
-        el("dSpace").textContent = data.spaceCode
-          ? `General Pod ${data.spaceCode}`
-          : (data.spaceName || "General Workstation");
-        el("dPackage").textContent = safeText(pkgText ? pkgText.toLowerCase() : null);
-      } else {
+        el("dSpace").textContent = res.name ? `${res.name} (${res.code})` : (res.code || "GENERAL");
+      }else if(type === "private"){
         el("dType").textContent = "Private Space";
-        el("dSpace").textContent = data.spaceCode
-          ? `Private Space ${data.spaceCode}`
-          : (data.spaceName || "—");
-        el("dPackage").textContent = safeText(pkgText ? pkgText.toLowerCase() : "daily");
+        el("dSpace").textContent = res.name ? `${res.name} (${res.code})` : (res.code || "P01/P02");
+      }else{
+        el("dType").textContent = safeText(res.type);
+        el("dSpace").textContent = res.name || res.code || "—";
       }
 
-      el("dTotal").textContent = (data.total != null) ? moneyNGN(data.total) : "—";
+      el("dPackage").textContent = safeText(pkg.name);
+      el("dTotal").textContent = moneyNGN(booking.amount_ngn);
 
-      el("dDates").textContent =
-        (data.endDate && data.endDate !== data.startDate)
-          ? `${safeText(data.startDate)} → ${safeText(data.endDate)}`
-          : safeText(data.startDate);
+      const start = booking.start_date;
+      const end = booking.end_date;
+      el("dDates").textContent = (end && end !== start) ? `${start} → ${end}` : safeText(start);
 
-      // copy button
+      // QR
+      // copy
       el("copyBtn").onclick = async () => {
         try{
-          await navigator.clipboard.writeText(data.bookingCode || "");
+          await navigator.clipboard.writeText(booking.booking_ref || "");
           showToast("Booking code copied");
-        }catch{
+        }catch(e){
           showToast("Copy not supported");
         }
       };
 
-      // email button (kept as mailto helper; real email should be server-side)
-      el("emailBtn").textContent = "Email me this confirmation";
-      el("emailBtn").disabled = !data.customer?.email;
-
+      // email (mailto)
+      el("emailBtn").disabled = !booking.customer_email;
       el("emailBtn").onclick = () => {
         const subject = encodeURIComponent("ZöD Hub Booking Confirmation");
         const body = encodeURIComponent(
-`Hello ${data.customer?.name || ""},
+`Hello ${booking.customer_name || ""},
 
-Your ZöD Hub booking is confirmed.
+Your ZöD Hub booking is ${status === "paid" ? "CONFIRMED" : "PENDING"}.
 
-Booking Code: ${data.bookingCode}
-Type: ${String(data.type).toLowerCase() === "general" ? "General Space" : "Private Space"}
-Space: ${String(data.type).toLowerCase() === "general"
-  ? (data.spaceCode ? ("General Pod " + data.spaceCode) : (data.spaceName || "General Workstation"))
-  : (data.spaceCode ? ("Private Space " + data.spaceCode) : (data.spaceName || "Private Space"))}
-Date: ${data.startDate || ""}
+Booking Code: ${booking.booking_ref}
+Type: ${type === "general" ? "General Space" : (type === "private" ? "Private Space" : safeText(res.type))}
+Space: ${res.name ? `${res.name} (${res.code})` : safeText(res.code)}
+Package: ${pkg.name || ""}
+Dates: ${(end && end !== start) ? `${start} → ${end}` : (start || "")}
+Total: ${moneyNGN(booking.amount_ngn)}
 
-Please present your code at the front desk.
+Please present your booking code at the front desk.
 
 Thank you,
 ZöD Hub`
         );
-        const to = data.customer?.email || "";
-        window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+        window.location.href = `mailto:${encodeURIComponent(booking.customer_email)}?subject=${subject}&body=${body}`;
       };
 
-      // clear local helpers
+      // clear
       el("clearBtn").onclick = () => {
         localStorage.removeItem("zodHubLast");
         localStorage.removeItem("zodHubPending");
         showToast("Cleared");
         setTimeout(() => location.href = "booking.html", 350);
       };
+
+      // cache last confirmation
+      try { localStorage.setItem("zodHubLast", JSON.stringify({ booking_ref: booking.booking_ref })); } catch {}
     }
 
     (async () => {
       if(!sb){
-        setEmptyState("Booking service is not configured. Please contact support.");
+        setBadState("Service not configured", "Supabase keys are missing. Please contact support.");
         return;
       }
 
-      // 1) If already have code, load it
-      if(codeParam){
-        setLoadingState("Loading your booking details…");
-        const data = await loadFromSupabaseByCode(codeParam);
-        renderUI(data);
-        return;
-      }
+      try{
+        // A) Paystack redirect: verify by reference, then redirect to ?code=
+        if(reference){
+          el("subline").textContent = "Verifying payment…";
+          const v = await verifyPaystack(reference);
 
-      // 2) If returned from Paystack with reference, verify it (server finalizes booking)
-      if(refParam){
-        setLoadingState("Verifying payment…");
-
-        try{
-          const v = await verifyPaystack(refParam);
-
-          if(!v.ok){
-            setEmptyState("Payment verification failed. Please contact support with your reference: " + refParam);
+          if(!v.ok || !v.booking_ref){
+            setBadState("Payment verification failed", "Please contact support with your Paystack reference: " + reference);
             return;
           }
 
-          // ✅ verify-paystack should return booking_code for BOTH general and private
-          const bookingCode = v.booking_code;
-
-          if(!bookingCode){
-            setEmptyState("Payment verified, but booking code was not returned. Please contact support with your reference: " + refParam);
-            return;
-          }
-
-          // Clean URL: redirect to ?code=... so refresh is safe
-          location.replace(`confirmation.html?code=${encodeURIComponent(bookingCode)}`);
-          return;
-
-        }catch(e){
-          console.error(e);
-          setEmptyState("Unable to verify payment right now. Please contact support with your reference: " + refParam);
+          // Clean URL for refresh safety
+          location.replace(`confirmation.html?code=${encodeURIComponent(v.booking_ref)}`);
           return;
         }
-      }
 
-      // 3) Direct open without params
-      setEmptyState("No confirmation found. Please make a booking first.");
+        // B) Direct open by code
+        const booking_ref =
+          bookingRefDirect ||
+          (() => {
+            try {
+              const last = JSON.parse(localStorage.getItem("zodHubLast") || "null");
+              return last?.booking_ref || null;
+            } catch { return null; }
+          })();
+
+        if(!booking_ref){
+          setBadState("No confirmation found", "No booking code was provided. Please make a booking first.");
+          return;
+        }
+
+        el("subline").textContent = "Loading your booking details…";
+        const booking = await loadBookingByRef(booking_ref);
+        render(booking);
+
+      }catch(e){
+        console.error(e);
+        setBadState("Error loading confirmation", e?.message || String(e));
+      }
     })();
   </script>
 </body>
