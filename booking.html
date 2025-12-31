@@ -737,14 +737,19 @@
         seats: qty
       }));
 
-      const res = await fetch(`${FUNCTIONS_BASE}/paystack-init`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          booking_ref,
-          callback_url: CALLBACK_URL
-        })
-      });
+     const res = await fetch(`${FUNCTIONS_BASE}/paystack-init`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+    "apikey": SUPABASE_ANON_KEY
+  },
+  body: JSON.stringify({
+    booking_ref,
+    callback_url: CALLBACK_URL
+  })
+});
+
 
       const json = await res.json();
       if (!res.ok) {
@@ -805,14 +810,18 @@
         endDate: end
       }));
 
-      const res = await fetch(`${FUNCTIONS_BASE}/paystack-init`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          booking_ref,
-          callback_url: CALLBACK_URL
-        })
-      });
+     const res = await fetch(`${FUNCTIONS_BASE}/paystack-init`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+    "apikey": SUPABASE_ANON_KEY
+  },
+  body: JSON.stringify({
+    booking_ref,
+    callback_url: CALLBACK_URL
+  })
+});
 
       const json = await res.json();
       if (!res.ok) {
