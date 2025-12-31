@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Book — ZöD Hub</title>
+
+  <!-- ✅ Your original CSS (kept exactly the same) -->
   <style>
     :root{
       --bg:#fbfbf8;
@@ -154,33 +156,32 @@
       font-weight:800;
     }
     .small{font-size:12px; color:var(--muted)}
-  
-/* ===== NAVBAR: consistent CTA (BOOK NOW) ===== */
-/* Only non-button nav links get the hover tile */
-.nav-links a:not(.btn):hover{
-  background:#fff;
-  color:var(--text);
-  box-shadow:var(--shadow2);
-  opacity:1;
-}
-/* BOOK NOW stays blue + white always */
-.nav-links a.btn.btn-primary,
-.nav-links a.btn.btn-primary:visited{
-  background: var(--accent);
-  color:#fff;
-  opacity:1;
-  filter:none;
-}
-.nav-links a.btn.btn-primary:hover,
-.nav-links a.btn.btn-primary:focus{
-  background: var(--accent);
-  color:#fff;
-  opacity:1;
-  filter:none;
-  box-shadow: var(--shadow2);
-}
 
-</style>
+    /* ===== NAVBAR: consistent CTA (BOOK NOW) ===== */
+    /* Only non-button nav links get the hover tile */
+    .nav-links a:not(.btn):hover{
+      background:#fff;
+      color:var(--text);
+      box-shadow:var(--shadow2);
+      opacity:1;
+    }
+    /* BOOK NOW stays blue + white always */
+    .nav-links a.btn.btn-primary,
+    .nav-links a.btn.btn-primary:visited{
+      background: var(--accent);
+      color:#fff;
+      opacity:1;
+      filter:none;
+    }
+    .nav-links a.btn.btn-primary:hover,
+    .nav-links a.btn.btn-primary:focus{
+      background: var(--accent);
+      color:#fff;
+      opacity:1;
+      filter:none;
+      box-shadow: var(--shadow2);
+    }
+  </style>
 </head>
 
 <body>
@@ -202,7 +203,7 @@
     <div class="page-head">
       <div>
         <h1>Book a Workspace</h1>
-        <div class="sub"></div>
+        <div class="sub">General = seat pool. Private = specific room (P01/P02).</div>
       </div>
 
       <div class="tabs" role="tablist" aria-label="Booking type">
@@ -213,40 +214,34 @@
 
     <!-- LAYOUT -->
     <section class="layout">
-      <!-- LEFT: FORM -->
+      <!-- LEFT: GENERAL -->
       <div class="card" id="panel-general">
-        <h2>General Workstation Pods (4-in-1 × 3)</h2>
-        <p class="meta"></p>
+        <h2>General Space (Seat Pool)</h2>
+        <p class="meta">Choose date + package + number of seats.</p>
 
         <div class="hr"></div>
 
         <form class="form" onsubmit="return false;">
           <div class="grid2">
             <div>
-              <label for="genPod">Pod</label>
-              <select id="genPod">
-                <option value="G01">G01 (4 seats)</option>
-                <option value="G02">G02 (4 seats)</option>
-                <option value="G03">G03 (4 seats)</option>
-              </select>
+              <label for="genStart">Start date</label>
+              <input id="genStart" type="date" />
             </div>
 
             <div>
               <label for="genPackage">Package</label>
               <select id="genPackage">
-                <option value="GEN_DAILY">Daily</option>
-                <option value="GEN_WEEKLY">Weekly</option>
-                <option value="GEN_MONTHLY">Monthly</option>
-                <option value="GEN_YEARLY">Yearly</option>
+                <option value="">Select package</option>
               </select>
             </div>
           </div>
 
           <div class="grid2">
             <div>
-              <label for="genStart">Start date</label>
-              <input id="genStart" type="date" />
+              <label for="genSeats">Seats</label>
+              <input id="genSeats" type="number" min="1" value="1" />
             </div>
+
             <div>
               <label for="genSeatInfo">Seat assignment</label>
               <input id="genSeatInfo" type="text" value="Seat assigned at front desk" disabled />
@@ -254,7 +249,7 @@
           </div>
 
           <div class="notice" id="genAvailability">
-            <span class="badge warn">Select a date</span>
+            <span class="badge warn">Select a date + package</span>
             <span class="meta"> Availability will appear here.</span>
           </div>
 
@@ -278,25 +273,34 @@
             Continue to Payment
           </button>
 
-          <div class="small"></div>
+          <div class="small">Only <b>paid</b> bookings block availability (prevents false “booked” states).</div>
         </form>
       </div>
 
+      <!-- LEFT: PRIVATE -->
       <div class="card" id="panel-private" style="display:none;">
-        <h2>Private Space (Daily)</h2>
-        <p class="meta"></p>
+        <h2>Private Space</h2>
+        <p class="meta">Choose room + date + package.</p>
 
         <div class="hr"></div>
 
         <form class="form" onsubmit="return false;">
-          <div>
-            <label for="privDate">Date</label>
-            <input id="privDate" type="date" />
+          <div class="grid2">
+            <div>
+              <label for="privDate">Start date</label>
+              <input id="privDate" type="date" />
+            </div>
+            <div>
+              <label for="privPackage">Package</label>
+              <select id="privPackage">
+                <option value="">Select package</option>
+              </select>
+            </div>
           </div>
 
           <div class="pick">
-            <b style="font-size:13px">Choose a private space</b>
-            <div class="meta"></div>
+            <b style="font-size:13px">Choose a private room</b>
+            <div class="meta">Rooms are exclusive (one booking at a time).</div>
 
             <div class="row">
               <div class="choice" id="pickP01" role="button" tabindex="0" aria-disabled="true">
@@ -327,7 +331,7 @@
             Continue to Payment
           </button>
 
-          <div class="small"></div>
+          <div class="small">Only <b>paid</b> bookings block availability.</div>
         </form>
       </div>
 
@@ -362,7 +366,7 @@
 
         <div class="notice">
           <b style="font-size:13px">Entry</b><br />
-          <span class="meta"></span>
+          <span class="meta">Show your confirmation at the front desk.</span>
         </div>
       </aside>
     </section>
@@ -370,87 +374,22 @@
 
   <!-- Supabase browser client (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script>
-    // === Supabase init (paste your keys) ===
-    const SUPABASE_URL = "https://eaunslmvqezqlukmuutf.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhdW5zbG12cWV6cWx1a211dXRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY3NTA2NDcsImV4cCI6MjA4MjMyNjY0N30.JMlH4-tfDuhx8DwmJSSbHbbV5tGIkKYlIlYwxO0UND8";
-    const hasSupabaseKeys = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 20;
-    const sb = hasSupabaseKeys ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-    async function getSpaceIdByCode(code){
-      const { data, error } = await sb
-        .from("spaces").select("id").eq("code", code).eq("is_active", true).single();
-      if(error) throw error;
-      return data.id;
-    }
+  <script>
+    // =========================
+    // CONFIG (use your existing keys)
+    // =========================
+    const SUPABASE_URL = "https://dzazdrpgedrrcnuzgjjc.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6YXpkcnBnZWRycmNudXpnampjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMjUxOTQsImV4cCI6MjA4MjcwMTE5NH0.8ZRnOiGtyfi5ibmTbKLROnQ4PqBIDvDfeH-mWGUQy_M";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    function mapPackage(pkg){
-      const map = {
-        GEN_DAILY: "daily",
-        GEN_WEEKLY: "weekly",
-        GEN_MONTHLY: "monthly",
-        GEN_YEARLY: "yearly",
-        PRIV_DAILY: "daily",
-        daily: "daily",
-        weekly: "weekly",
-        monthly: "monthly",
-        yearly: "yearly"
-      };
-      return map[pkg] || "daily";
-    }
+    // ✅ Option B tables (the new schema we discussed)
+    // - packages
+    // - resources (GENERAL, P01, P02)
+    // - bookings (status: pending/paid)
 
-    function makeBookingCode(){
-      return "ZDH-" + crypto.randomUUID().slice(0,8).toUpperCase();
-    }
-
-
-    // ===== Pricing placeholders (edit later) =====
     const CURRENCY = "NGN";
-    const PRICES = {
-      // Prices are in NGN
-      GEN_DAILY: 12000,
-      GEN_WEEKLY: 50000,
-      GEN_MONTHLY: 160000,
-      GEN_YEARLY: 1200000,
-      PRIV_DAILY: 35000
-    };
-
-    // Production-safe callback URL (works on Vercel + custom domain)
     const CALLBACK_URL = `${window.location.origin}/confirmation.html`;
-
-    // ===== Availability (production-only) =====
-// This page requires a working Supabase connection and a real availability source.
-// Expected RPC: get_availability_for_date(p_date text) returning rows like:
-// { space_code: 'G01', seats_left: 3 } and for private spaces { space_code: 'P01', seats_left: 1 }.
-async function getAvailabilityForDate(dateStr){
-  if(!dateStr) return [];
-  if(!sb) throw new Error("Booking service is not configured.");
-  const { data, error } = await sb.rpc("get_availability_for_date", { p_date: dateStr });
-  if(error) throw error;
-  return Array.isArray(data) ? data : [];
-}
-async function seatsLeft(spaceCode, dateStr){
-  if (!dateStr) return null;
-
-  const { data, error } = await sb
-    .rpc("get_availability_for_date", { p_date: dateStr });
-
-  if (error) {
-    console.error("get_availability_for_date error:", error);
-    return null;
-  }
-
-  const row = (data || []).find(
-    r => String(r.space_code).toUpperCase() === String(spaceCode).toUpperCase()
-  );
-
-  return row ? Number(row.seats_left) : 0;
-}
-
-
-    function money(n){
-      return new Intl.NumberFormat("en-NG", { style:"currency", currency:CURRENCY }).format(n);
-    }
 
     // Tabs
     const tabGeneral = document.getElementById("tab-general");
@@ -486,138 +425,16 @@ async function seatsLeft(spaceCode, dateStr){
     const summaryPackage = document.getElementById("summaryPackage");
     const summaryTotal = document.getElementById("summaryTotal");
 
-    // -------- General logic
-    const genPod = document.getElementById("genPod");
-    const genPackage = document.getElementById("genPackage");
+    // General elements
     const genStart = document.getElementById("genStart");
+    const genPackage = document.getElementById("genPackage");
+    const genSeats = document.getElementById("genSeats");
     const genAvailability = document.getElementById("genAvailability");
     const genContinue = document.getElementById("genContinue");
-    // Set minimum selectable date to today (prevents past bookings)
-    const TODAY = new Date().toISOString().slice(0,10);
-    [genStart, privDate].forEach(inp => { if(inp) inp.min = TODAY; });
 
-
-    function syncSummaryFromGeneral(){
-      const pkg = genPackage.value;
-      const pkgLabel = genPackage.options[genPackage.selectedIndex].text;
-      const start = genStart.value;
-
-      summaryType.textContent = "General Space";
-      const pod = genPod.value;
-      summarySpace.textContent = `General Pod ${pod} (4 seats)`;
-      summaryDates.textContent = start ? start : "—";
-      summaryPackage.textContent = pkgLabel;
-      summaryTotal.textContent = money(PRICES[pkg] || 0);
-    }
-
-   async async function refreshGeneral() {
-  syncSummaryFromGeneral();
-
-  const start = genStart.value;
-  const pod = genPod.value;
-
-  if (!start) {
-    genAvailability.innerHTML = `<span class="badge warn">Select a date</span>`;
-    genContinue.disabled = true;
-    return;
-  }
-
-  if(!sb){
-    genAvailability.innerHTML = `<span class="badge no">Unavailable</span> <span class="meta"> Booking service is not configured.</span>`;
-    genContinue.disabled = true;
-    return;
-  }
-
-  const { data, error } = await sb.rpc("get_availability_for_date", { p_date: start });
-
-  if (error || !data) {
-    console.error("General availability error:", error);
-    genAvailability.innerHTML = `<span class="badge no">Unavailable</span>`;
-    genContinue.disabled = true;
-    return;
-  }
-
-  const row = data.find(r => r.space_code === pod);
-
-  if (!row || row.seats_left <= 0) {
-    genAvailability.innerHTML = `<span class="badge no">Fully booked</span>`;
-    genContinue.disabled = true;
-    return;
-  }
-
-  genAvailability.innerHTML =
-    `<span class="badge ok">Available</span>
-     <span class="meta"> ${row.seats_left} of 4 seats remaining in ${pod}</span>`;
-
-  genContinue.disabled = false;
-}
-
-
-    genPod.addEventListener("change", refreshGeneral);
-    genPackage.addEventListener("change", refreshGeneral);
-    genStart.addEventListener("change", refreshGeneral);
-    genPod.addEventListener("input", refreshGeneral);
-    genPackage.addEventListener("input", refreshGeneral);
-    genStart.addEventListener("input", refreshGeneral);
-
-    // Run once on load (so availability shows immediately if a date is already set)
-    refreshGeneral();
-
-    genContinue.addEventListener("click", async () => {
-  const name = document.getElementById("fullName").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-
-  if (!name || !email) {
-    alert("Please enter your full name and email.");
-    return;
-  }
-
-  const payload = {
-    type: "general",
-    spaceCode: genPod.value,
-    package: genPackage.value,
-    startDate: genStart.value,
-    customer: { name, email, phone: phone || "" }
-  };
-
-  localStorage.setItem("zodHubPending", JSON.stringify(payload));
-
-  const amountNGN = PRICES[payload.package] || 0;
-  if (!amountNGN) {
-    alert("Payment amount is not set.");
-    return;
-  }
-
-  const res = await fetch("https://eaunslmvqezqlukmuutf.supabase.co/functions/v1/init-paystack", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + SUPABASE_ANON_KEY,
-      "apikey": SUPABASE_ANON_KEY
-    },
-    body: JSON.stringify({
-      email,
-      amountNGN,
-      callback_url: CALLBACK_URL,
- // change to your live domain later
-      metadata: { booking: payload }
-    })
-  });
-
-  const data = await res.json();
-  if (!data.authorization_url) {
-    console.log("init-paystack response:", data);
-    alert("Unable to start Paystack payment. Check console.");
-    return;
-  }
-
-  window.location.href = data.authorization_url;
-});
-
-
-    // -------- Private logic
+    // Private elements
     const privDate = document.getElementById("privDate");
+    const privPackage = document.getElementById("privPackage");
     const pickP01 = document.getElementById("pickP01");
     const pickP02 = document.getElementById("pickP02");
     const p01Badge = document.getElementById("p01Badge");
@@ -625,46 +442,205 @@ async function seatsLeft(spaceCode, dateStr){
     const privChosenEl = document.getElementById("privChosen");
     const privContinue = document.getElementById("privContinue");
 
+    let packages = [];
+    let resources = [];
+    let generalResource = null;
     let privSelected = null;
+
+    function money(n){
+      return new Intl.NumberFormat("en-NG", { style:"currency", currency:CURRENCY }).format(Number(n || 0));
+    }
+
+    function todayISO(){
+      return new Date().toISOString().slice(0,10);
+    }
+
+    function addDaysInclusive(startDateStr, durationDays){
+      const d = new Date(startDateStr + "T00:00:00Z");
+      d.setUTCDate(d.getUTCDate() + (Number(durationDays) - 1));
+      return d.toISOString().slice(0,10);
+    }
 
     function setChoiceEnabled(el, enabled){
       el.setAttribute("aria-disabled", enabled ? "false" : "true");
     }
 
-    function syncSummaryFromPrivate(){
-      summaryType.textContent = "Private Space";
-      summarySpace.textContent = privSelected ? `Private Space ${privSelected}` : "—";
-      summaryDates.textContent = privDate.value ? privDate.value : "—";
-      summaryPackage.textContent = "Daily";
-      summaryTotal.textContent = money(PRICES.PRIV_DAILY);
+    function selectedPkg(selectEl){
+      const id = selectEl.value;
+      return packages.find(p => p.id === id) || null;
     }
 
-    async async function refreshPrivate(){
-      const d = privDate.value;
-      let p01Left = null;
-      let p02Left = null;
-      if(d){
-        try{
-          p01Left = await seatsLeft("P01", d);
-          p02Left = await seatsLeft("P02", d);
-        }catch(e){
-          p01Left = null;
-          p02Left = null;
-        }
+    async function loadPackagesAndResources(){
+      // packages
+      const { data: pkgData, error: pkgErr } = await sb
+        .from("packages")
+        .select("id, code, name, duration_days, price_ngn, is_active")
+        .eq("is_active", true)
+        .order("duration_days", { ascending: true });
+
+      if(pkgErr) throw pkgErr;
+      packages = pkgData || [];
+
+      const pkgOptions = ['<option value="">Select package</option>']
+        .concat(packages.map(p => `<option value="${p.id}">${p.name}</option>`))
+        .join("");
+
+      genPackage.innerHTML = pkgOptions;
+      privPackage.innerHTML = pkgOptions;
+
+      // resources
+      const { data: resData, error: resErr } = await sb
+        .from("resources")
+        .select("id, type, code, name, capacity, is_active")
+        .eq("is_active", true)
+        .order("code", { ascending: true });
+
+      if(resErr) throw resErr;
+      resources = resData || [];
+      generalResource = resources.find(r => r.code === "GENERAL") || null;
+
+      if(!generalResource){
+        console.warn("GENERAL resource not found. Ensure resources has code='GENERAL'.");
+      }
+    }
+
+    // ---------- Availability checks (paid bookings only)
+    async function generalSeatsRemaining(start, end){
+      if(!generalResource) return { remaining: 0, capacity: 0, booked: 0 };
+
+      const { data, error } = await sb
+        .from("bookings")
+        .select("seats_qty")
+        .eq("resource_id", generalResource.id)
+        .eq("status", "paid")
+        .lte("start_date", end)
+        .gte("end_date", start);
+
+      if(error) throw error;
+
+      const booked = (data || []).reduce((s, b) => s + Number(b.seats_qty || 0), 0);
+      const capacity = Number(generalResource.capacity || 0);
+      const remaining = Math.max(0, capacity - booked);
+      return { remaining, capacity, booked };
+    }
+
+    async function privateIsBooked(roomCode, start, end){
+      const room = resources.find(r => r.code === roomCode);
+      if(!room) return true;
+
+      const { data, error } = await sb
+        .from("bookings")
+        .select("id")
+        .eq("resource_id", room.id)
+        .eq("status", "paid")
+        .lte("start_date", end)
+        .gte("end_date", start)
+        .limit(1);
+
+      if(error) throw error;
+      return (data || []).length > 0;
+    }
+
+    // ---------- Summary
+    function syncSummaryFromGeneral(){
+      const pkg = selectedPkg(genPackage);
+      const start = genStart.value;
+      const qty = Math.max(1, Number(genSeats.value || 1));
+
+      summaryType.textContent = "General Space";
+      summarySpace.textContent = `General (Seat Pool) × ${qty}`;
+      if(pkg && start){
+        const end = addDaysInclusive(start, pkg.duration_days);
+        summaryDates.textContent = `${start} → ${end}`;
+        summaryPackage.textContent = pkg.name;
+        summaryTotal.textContent = money(Number(pkg.price_ngn || 0) * qty);
+      }else{
+        summaryDates.textContent = start || "—";
+        summaryPackage.textContent = pkg ? pkg.name : "—";
+        summaryTotal.textContent = "—";
+      }
+    }
+
+    function syncSummaryFromPrivate(){
+      const pkg = selectedPkg(privPackage);
+      const start = privDate.value;
+
+      summaryType.textContent = "Private Space";
+      summarySpace.textContent = privSelected ? `Room ${privSelected}` : "—";
+
+      if(pkg && start){
+        const end = addDaysInclusive(start, pkg.duration_days);
+        summaryDates.textContent = `${start} → ${end}`;
+        summaryPackage.textContent = pkg.name;
+        summaryTotal.textContent = money(Number(pkg.price_ngn || 0)); // private is qty 1
+      }else{
+        summaryDates.textContent = start || "—";
+        summaryPackage.textContent = pkg ? pkg.name : "—";
+        summaryTotal.textContent = "—";
+      }
+    }
+
+    // ---------- Refresh (General)
+    async function refreshGeneral(){
+      syncSummaryFromGeneral();
+
+      const start = genStart.value;
+      const pkg = selectedPkg(genPackage);
+      const qty = Math.max(1, Number(genSeats.value || 1));
+
+      if(!start || !pkg){
+        genAvailability.innerHTML = `<span class="badge warn">Select a date + package</span>`;
+        genContinue.disabled = true;
+        return;
       }
 
-      const p01Booked = (d && p01Left !== null) ? (Number(p01Left) <= 0) : true;
-      const p02Booked = (d && p02Left !== null) ? (Number(p02Left) <= 0) : true;
+      const end = addDaysInclusive(start, pkg.duration_days);
 
-      if(!d){
+      try{
+        const { remaining, capacity } = await generalSeatsRemaining(start, end);
+
+        if(qty <= remaining){
+          genAvailability.innerHTML =
+            `<span class="badge ok">Available</span>
+             <span class="meta"> ${remaining} seats left (capacity ${capacity})</span>`;
+          genContinue.disabled = false;
+        }else{
+          genAvailability.innerHTML =
+            `<span class="badge no">Not enough seats</span>
+             <span class="meta"> Only ${remaining} left for this range</span>`;
+          genContinue.disabled = true;
+        }
+      }catch(e){
+        console.error("General availability error:", e);
+        genAvailability.innerHTML = `<span class="badge no">Unavailable</span>`;
+        genContinue.disabled = true;
+      }
+    }
+
+    // ---------- Refresh (Private)
+    async function refreshPrivate(){
+      syncSummaryFromPrivate();
+
+      const start = privDate.value;
+      const pkg = selectedPkg(privPackage);
+
+      if(!start || !pkg){
         setChoiceEnabled(pickP01, false);
         setChoiceEnabled(pickP02, false);
-        p01Badge.className = "badge warn";
-        p02Badge.className = "badge warn";
-        p01Badge.textContent = "Select date";
-        p02Badge.textContent = "Select date";
+        p01Badge.className = "badge warn"; p02Badge.className = "badge warn";
+        p01Badge.textContent = "Select date"; p02Badge.textContent = "Select date";
         privSelected = null;
-      } else {
+        privChosenEl.textContent = "—";
+        privContinue.disabled = true;
+        return;
+      }
+
+      const end = addDaysInclusive(start, pkg.duration_days);
+
+      try{
+        const p01Booked = await privateIsBooked("P01", start, end);
+        const p02Booked = await privateIsBooked("P02", start, end);
+
         setChoiceEnabled(pickP01, !p01Booked);
         setChoiceEnabled(pickP02, !p02Booked);
 
@@ -673,106 +649,181 @@ async function seatsLeft(spaceCode, dateStr){
         p01Badge.textContent = p01Booked ? "Booked" : "Available";
         p02Badge.textContent = p02Booked ? "Booked" : "Available";
 
-        // If selected becomes booked, clear it
         if(privSelected === "P01" && p01Booked) privSelected = null;
         if(privSelected === "P02" && p02Booked) privSelected = null;
+
+        privChosenEl.textContent = privSelected ? privSelected : "—";
+        privContinue.disabled = !(privSelected && start && pkg);
+        syncSummaryFromPrivate();
+      }catch(e){
+        console.error("Private availability error:", e);
+        p01Badge.className = "badge no"; p02Badge.className = "badge no";
+        p01Badge.textContent = "Unavailable"; p02Badge.textContent = "Unavailable";
+        setChoiceEnabled(pickP01, false);
+        setChoiceEnabled(pickP02, false);
+        privSelected = null;
+        privChosenEl.textContent = "—";
+        privContinue.disabled = true;
       }
+    }
 
-      privChosenEl.textContent = privSelected ? privSelected : "—";
-      privContinue.disabled = !(d && privSelected);
+    function tryPick(roomCode){
+      if(document.getElementById(roomCode === "P01" ? "pickP01" : "pickP02").getAttribute("aria-disabled") === "true"){
+        return;
+      }
+      privSelected = roomCode;
+      privChosenEl.textContent = roomCode;
       syncSummaryFromPrivate();
+      privContinue.disabled = !(privDate.value && privPackage.value && privSelected);
     }
 
-    async function tryPick(spaceId){
-      const d = privDate.value;
-      if(!d) return;
-      let left = null;
-      try{ left = await seatsLeft(spaceId, d); }catch(e){ left = null; }
-      if(left === null) return;
-      if(Number(left) <= 0) return;
-      privSelected = spaceId;
-      refreshPrivate();
-    }
-
-    pickP01.addEventListener("click", () => { tryPick("P01"); });
-    pickP02.addEventListener("click", () => { tryPick("P02"); });
+    pickP01.addEventListener("click", () => tryPick("P01"));
+    pickP02.addEventListener("click", () => tryPick("P02"));
     pickP01.addEventListener("keydown", (e) => { if(e.key==="Enter") tryPick("P01"); });
     pickP02.addEventListener("keydown", (e) => { if(e.key==="Enter") tryPick("P02"); });
 
-    privDate.addEventListener("change", async () => { privSelected = null; await refreshPrivate(); });
-    privDate.addEventListener("input", async () => { privSelected = null; await refreshPrivate(); });
-
-    // Run once on load (private)
-    refreshPrivate();
-
-   privContinue.addEventListener("click", async () => {
-  const name = document.getElementById("privName").value.trim();
-  const email = document.getElementById("privEmail").value.trim();
-
-  if (!name || !email) {
-    alert("Please enter your full name and email.");
-    return;
-  }
-
-  const payload = {
-    type: "private",
-    spaceCode: privSelected,       // P01/P02
-    package: "PRIV_DAILY",
-    startDate: privDate.value,
-    customer: { name, email, phone: "" }
-  };
-
-  localStorage.setItem("zodHubPending", JSON.stringify(payload));
-
-  const amountNGN = PRICES.PRIV_DAILY || 0;
-  if (!amountNGN) {
-    alert("Payment amount is not set.");
-    return;
-  }
-
-  const res = await fetch("https://eaunslmvqezqlukmuutf.supabase.co/functions/v1/init-paystack", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + SUPABASE_ANON_KEY,
-      "apikey": SUPABASE_ANON_KEY
-    },
-    body: JSON.stringify({
-      email,
-      amountNGN,
-      callback_url: CALLBACK_URL,
- // change to your live domain later
-      metadata: { booking: payload }
-    })
-  });
-
-  const data = await res.json();
-  if (!data.authorization_url) {
-    console.log("init-paystack response:", data);
-    alert("Unable to start Paystack payment. Check console.");
-    return;
-  }
-
-  window.location.href = data.authorization_url;
-});
-
-
-    // init
-
-    // ===== Production guard: disable booking if Supabase isn't configured =====
-    if(!sb){
-      genAvailability.innerHTML = `<span class="badge no">Unavailable</span> <span class="meta"> Booking service is not configured. Please set your Supabase keys.</span>`;
-      genContinue.disabled = true;
-      p01Badge.className = "badge no"; p01Badge.textContent = "Unavailable";
-      p02Badge.className = "badge no"; p02Badge.textContent = "Unavailable";
-      privContinue.disabled = true;
+    // Create booking reference
+    function makeBookingRef(){
+      return "ZDH-" + (crypto.randomUUID ? crypto.randomUUID().slice(0,8) : String(Date.now()).slice(-8)).toUpperCase();
     }
 
-    refreshGeneral();
-    refreshPrivate();
-    syncSummaryFromGeneral();
-  </script>
+    // Continue buttons (store payload + redirect to payment.html?ref=...)
+    genContinue.addEventListener("click", async () => {
+      const name = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
 
-  <!-- Supabase client -->
-  </body>
+      if(!name || !email){ alert("Please enter your full name and email."); return; }
+
+      const pkg = selectedPkg(genPackage);
+      const start = genStart.value;
+      const qty = Math.max(1, Number(genSeats.value || 1));
+      const end = addDaysInclusive(start, pkg.duration_days);
+
+      // re-check
+      await refreshGeneral();
+      if(genContinue.disabled) return;
+
+      const booking_ref = makeBookingRef();
+      const amount_ngn = Number(pkg.price_ngn || 0) * qty;
+
+      const { error } = await sb.from("bookings").insert([{
+        booking_ref,
+        customer_name: name,
+        customer_email: email,
+        customer_phone: phone || null,
+        resource_id: generalResource.id,
+        package_id: pkg.id,
+        start_date: start,
+        end_date: end,
+        seats_qty: qty,
+        status: "pending",
+        amount_ngn
+      }]);
+
+      if(error){
+        console.error(error);
+        alert("Booking failed. Check console.");
+        return;
+      }
+
+      localStorage.setItem("zodHubPending", JSON.stringify({
+        type: "general",
+        booking_ref,
+        startDate: start,
+        endDate: end,
+        seats: qty
+      }));
+
+      window.location.href = `payment.html?ref=${encodeURIComponent(booking_ref)}`;
+    });
+
+    privContinue.addEventListener("click", async () => {
+      const name = document.getElementById("privName").value.trim();
+      const email = document.getElementById("privEmail").value.trim();
+
+      if(!name || !email){ alert("Please enter your full name and email."); return; }
+      if(!privSelected){ alert("Please choose P01 or P02."); return; }
+
+      const pkg = selectedPkg(privPackage);
+      const start = privDate.value;
+      const end = addDaysInclusive(start, pkg.duration_days);
+
+      // re-check
+      await refreshPrivate();
+      if(privContinue.disabled) return;
+
+      const room = resources.find(r => r.code === privSelected);
+      if(!room){ alert("Room resource missing in database."); return; }
+
+      const booking_ref = makeBookingRef();
+      const amount_ngn = Number(pkg.price_ngn || 0);
+
+      const { error } = await sb.from("bookings").insert([{
+        booking_ref,
+        customer_name: name,
+        customer_email: email,
+        customer_phone: null,
+        resource_id: room.id,
+        package_id: pkg.id,
+        start_date: start,
+        end_date: end,
+        seats_qty: 1,
+        status: "pending",
+        amount_ngn
+      }]);
+
+      if(error){
+        console.error(error);
+        alert("Booking failed. Check console.");
+        return;
+      }
+
+      localStorage.setItem("zodHubPending", JSON.stringify({
+        type: "private",
+        booking_ref,
+        room: privSelected,
+        startDate: start,
+        endDate: end
+      }));
+
+      window.location.href = `payment.html?ref=${encodeURIComponent(booking_ref)}`;
+    });
+
+    // Events
+    genStart.addEventListener("change", refreshGeneral);
+    genPackage.addEventListener("change", refreshGeneral);
+    genSeats.addEventListener("input", refreshGeneral);
+
+    privDate.addEventListener("change", async () => { privSelected = null; await refreshPrivate(); });
+    privPackage.addEventListener("change", async () => { privSelected = null; await refreshPrivate(); });
+
+    // Init
+    (async function init(){
+      // prevent past bookings
+      const t = todayISO();
+      genStart.min = t;
+      privDate.min = t;
+
+      genStart.value = t;
+      privDate.value = t;
+
+      try{
+        await loadPackagesAndResources();
+      }catch(e){
+        console.error(e);
+        genAvailability.innerHTML = `<span class="badge no">Unavailable</span> <span class="meta"> Booking service error.</span>`;
+        genContinue.disabled = true;
+        p01Badge.className = "badge no"; p01Badge.textContent = "Unavailable";
+        p02Badge.className = "badge no"; p02Badge.textContent = "Unavailable";
+        privContinue.disabled = true;
+        return;
+      }
+
+      syncSummaryFromGeneral();
+      await refreshGeneral();
+      await refreshPrivate();
+    })();
+  </script>
+</body>
 </html>
