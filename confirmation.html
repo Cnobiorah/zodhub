@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Booking Confirmed — ZöD Hub</title>
-
   <!-- ✅ KEEPING YOUR OLD STYLE EXACTLY -->
   <style>
     :root{
@@ -191,7 +190,7 @@
     }
   </style>
 </head>
-
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <body>
   <!-- NAV -->
   <div class="nav">
@@ -339,6 +338,20 @@
     const moneyNGN = (n) =>
       new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" })
         .format(Number(n || 0));
+		
+		// QR: draw into <canvas id="qrCanvas">
+function renderQRToCanvas(text){
+  const canvas = document.getElementById("qrCanvas");
+  if (!canvas || !text) return;
+
+  QRCode.toCanvas(
+    canvas,
+    text,
+    { width: 180, margin: 1 },
+    (error) => { if (error) console.error("QR error:", error); }
+  );
+}
+
 
     function setBadState(title, message){
       el("headline").textContent = title || "Verification error";
@@ -435,8 +448,13 @@
         : "Your booking is created but not yet confirmed. If you paid, refresh this page.";
 
       // booking code (use booking_ref as the code)
-      el("bookingCode").textContent = safeText(booking.booking_ref);
-      el("copyBtn").disabled = !booking.booking_ref;
+     // booking code (use booking_ref as the code)
+el("bookingCode").textContent = safeText(booking.booking_ref);
+el("copyBtn").disabled = !booking.booking_ref;
+
+// ✅ QR (only when code exists)
+if (booking.booking_ref) renderQRToCanvas(booking.booking_ref);
+
 
       // created at pill
       const created = booking.created_at ? new Date(booking.created_at) : null;
