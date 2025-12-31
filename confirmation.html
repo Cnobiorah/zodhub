@@ -315,7 +315,7 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6YXpkcnBnZWRycmNudXpnampjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMjUxOTQsImV4cCI6MjA4MjcwMTE5NH0.8ZRnOiGtyfi5ibmTbKLROnQ4PqBIDvDfeH-mWGUQy_M";
 
     // ✅ Your Edge Function endpoint (change name if your function is different)
-    const FUNCTIONS_BASE = "https://eaunslmvqezqlukmuutf.functions.supabase.co";
+    const FUNCTIONS_BASE = "https://dzazdrpgedrrcnuzgjjc.functions.supabase.co";
     const VERIFY_FN = "paystack-verify";
 
     const hasSupabaseKeys = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 20;
@@ -378,7 +378,11 @@
     async function verifyPaystack(ref){
       const r = await fetch(`${FUNCTIONS_BASE}/${VERIFY_FN}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+      "apikey": SUPABASE_ANON_KEY
+    },
         body: JSON.stringify({ reference: ref })
       });
       const j = await r.json();
