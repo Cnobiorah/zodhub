@@ -124,18 +124,7 @@
     }
     .kv span:first-child{color:var(--muted); font-weight:800}
     .kv:last-child{border-bottom:none}
-
-    .qr{
-      border:1px dashed var(--line);
-      border-radius:16px;
-      padding:14px;
-      background:#fff;
-      display:grid;
-      gap:10px;
-      place-items:center;
-      min-height:220px;
-    }
-    canvas{max-width:100%}
+canvas{max-width:100%}
     .sticky{position:sticky; top:88px}
     .note{
       border:1px solid var(--line);
@@ -190,7 +179,6 @@
     }
   </style>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <body>
   <!-- NAV -->
   <div class="nav">
@@ -241,13 +229,7 @@
         <div class="hr"></div>
 
         <!-- QR -->
-        <div class="qr">
-          <b style="font-size:13px; justify-self:start">QR Code</b>
-          <canvas id="qrCanvas" width="180" height="180"></canvas>
-          <div class="meta" style="text-align:center">
-            Staff can scan this QR to verify your booking instantly.
-          </div>
-        </div>
+</div>
 
         <div class="hr"></div>
 
@@ -297,9 +279,7 @@
   <div class="toast" id="toast">Copied</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-
-  <script>
+<script>
     // ============================
     // OPTION B (NEW DB) CONFIRMATION LOGIC
     // - UI stays identical to your old page
@@ -339,18 +319,6 @@
       new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN" })
         .format(Number(n || 0));
 		
-		// QR: draw into <canvas id="qrCanvas">
-function renderQRToCanvas(text){
-  const canvas = document.getElementById("qrCanvas");
-  if (!canvas || !text) return;
-
-  QRCode.toCanvas(
-    canvas,
-    text,
-    { width: 180, margin: 1 },
-    (error) => { if (error) console.error("QR error:", error); }
-  );
-}
 
 
     function setBadState(title, message){
@@ -374,18 +342,9 @@ function renderQRToCanvas(text){
       el("dStatus").innerHTML = `<span class="badge no">Failed</span>`;
 
       // Clear QR
-      const canvas = el("qrCanvas");
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
-    async function drawQR(text){
-      const canvas = el("qrCanvas");
-      try{
-        await QRCode.toCanvas(canvas, text || "ZODHUB", { margin: 1, width: 180 });
-      }catch(e){
-        console.warn("QR failed:", e);
-      }
     }
 
     async function verifyPaystack(ref){
@@ -482,9 +441,7 @@ function renderQRToCanvas(text){
       el("dDates").textContent = (end && end !== start) ? `${start} → ${end}` : safeText(start);
 
       // QR
-      drawQR(booking.booking_ref || "ZODHUB");
-
-      // copy
+// copy
       el("copyBtn").onclick = async () => {
         try{
           await navigator.clipboard.writeText(booking.booking_ref || "");
