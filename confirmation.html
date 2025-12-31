@@ -190,6 +190,7 @@
     }
   </style>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <body>
   <!-- NAV -->
   <div class="nav">
@@ -343,11 +344,6 @@ function renderQRToCanvas(text){
   const canvas = document.getElementById("qrCanvas");
   if (!canvas || !text) return;
 
-  if (typeof QRCode === "undefined") {
-    console.warn("QRCode library not loaded");
-    return;
-  }
-
   QRCode.toCanvas(
     canvas,
     text,
@@ -382,6 +378,14 @@ function renderQRToCanvas(text){
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
+
+    async function drawQR(text){
+      const canvas = el("qrCanvas");
+      try{
+        await QRCode.toCanvas(canvas, text || "ZODHUB", { margin: 1, width: 180 });
+      }catch(e){
+        console.warn("QR failed:", e);
+      }
     }
 
     async function verifyPaystack(ref){
@@ -444,13 +448,8 @@ function renderQRToCanvas(text){
         : "Your booking is created but not yet confirmed. If you paid, refresh this page.";
 
       // booking code (use booking_ref as the code)
-     // booking code (use booking_ref as the code)
-el("bookingCode").textContent = safeText(booking.booking_ref);
-el("copyBtn").disabled = !booking.booking_ref;
-
-// ✅ QR (only when code exists)
-if (booking.booking_ref) renderQRToCanvas(booking.booking_ref);
-
+      el("bookingCode").textContent = safeText(booking.booking_ref);
+      el("copyBtn").disabled = !booking.booking_ref;
 
       // created at pill
       const created = booking.created_at ? new Date(booking.created_at) : null;
@@ -483,12 +482,14 @@ if (booking.booking_ref) renderQRToCanvas(booking.booking_ref);
       el("dDates").textContent = (end && end !== start) ? `${start} → ${end}` : safeText(start);
 
       // QR
+      drawQR(booking.booking_ref || "ZODHUB");
+
       // copy
       el("copyBtn").onclick = async () => {
         try{
           await navigator.clipboard.writeText(booking.booking_ref || "");
           showToast("Booking code copied");
-        }catch(e){
+        }catch{
           showToast("Copy not supported");
         }
       };
