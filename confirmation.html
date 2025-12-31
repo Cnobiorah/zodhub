@@ -382,7 +382,6 @@ function renderQRToCanvas(text){
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-    }
 
     async function verifyPaystack(ref){
       const r = await fetch(`${FUNCTIONS_BASE}/${VERIFY_FN}`, {
