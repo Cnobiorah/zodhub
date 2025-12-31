@@ -390,7 +390,7 @@
         GEN_WEEKLY: "weekly",
         GEN_MONTHLY: "monthly",
         GEN_YEARLY: "yearly",
-        PRI_DAILY: "daily",
+        PRIV_DAILY: "daily",
         daily: "daily",
         weekly: "weekly",
         monthly: "monthly",
@@ -492,6 +492,10 @@ async function seatsLeft(spaceCode, dateStr){
     const genStart = document.getElementById("genStart");
     const genAvailability = document.getElementById("genAvailability");
     const genContinue = document.getElementById("genContinue");
+    // Set minimum selectable date to today (prevents past bookings)
+    const TODAY = new Date().toISOString().slice(0,10);
+    [genStart, privDate].forEach(inp => { if(inp) inp.min = TODAY; });
+
 
     function syncSummaryFromGeneral(){
       const pkg = genPackage.value;
@@ -506,7 +510,7 @@ async function seatsLeft(spaceCode, dateStr){
       summaryTotal.textContent = money(PRICES[pkg] || 0);
     }
 
-   async function refreshGeneral() {
+   async async function refreshGeneral() {
   syncSummaryFromGeneral();
 
   const start = genStart.value;
@@ -514,6 +518,12 @@ async function seatsLeft(spaceCode, dateStr){
 
   if (!start) {
     genAvailability.innerHTML = `<span class="badge warn">Select a date</span>`;
+    genContinue.disabled = true;
+    return;
+  }
+
+  if(!sb){
+    genAvailability.innerHTML = `<span class="badge no">Unavailable</span> <span class="meta"> Booking service is not configured.</span>`;
     genContinue.disabled = true;
     return;
   }
@@ -546,6 +556,12 @@ async function seatsLeft(spaceCode, dateStr){
     genPod.addEventListener("change", refreshGeneral);
     genPackage.addEventListener("change", refreshGeneral);
     genStart.addEventListener("change", refreshGeneral);
+    genPod.addEventListener("input", refreshGeneral);
+    genPackage.addEventListener("input", refreshGeneral);
+    genStart.addEventListener("input", refreshGeneral);
+
+    // Run once on load (so availability shows immediately if a date is already set)
+    refreshGeneral();
 
     genContinue.addEventListener("click", async () => {
   const name = document.getElementById("fullName").value.trim();
@@ -562,7 +578,7 @@ async function seatsLeft(spaceCode, dateStr){
     spaceCode: genPod.value,
     package: genPackage.value,
     startDate: genStart.value,
-    customer: { name, email }
+    customer: { name, email, phone: phone || "" }
   };
 
   localStorage.setItem("zodHubPending", JSON.stringify(payload));
@@ -577,7 +593,8 @@ async function seatsLeft(spaceCode, dateStr){
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer " + SUPABASE_ANON_KEY
+      "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+      "apikey": SUPABASE_ANON_KEY
     },
     body: JSON.stringify({
       email,
@@ -622,7 +639,7 @@ async function seatsLeft(spaceCode, dateStr){
       summaryTotal.textContent = money(PRICES.PRIV_DAILY);
     }
 
-    async function refreshPrivate(){
+    async async function refreshPrivate(){
       const d = privDate.value;
       let p01Left = null;
       let p02Left = null;
@@ -683,6 +700,10 @@ async function seatsLeft(spaceCode, dateStr){
     pickP02.addEventListener("keydown", (e) => { if(e.key==="Enter") tryPick("P02"); });
 
     privDate.addEventListener("change", async () => { privSelected = null; await refreshPrivate(); });
+    privDate.addEventListener("input", async () => { privSelected = null; await refreshPrivate(); });
+
+    // Run once on load (private)
+    refreshPrivate();
 
    privContinue.addEventListener("click", async () => {
   const name = document.getElementById("privName").value.trim();
@@ -713,7 +734,8 @@ async function seatsLeft(spaceCode, dateStr){
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer " + SUPABASE_ANON_KEY
+      "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+      "apikey": SUPABASE_ANON_KEY
     },
     body: JSON.stringify({
       email,

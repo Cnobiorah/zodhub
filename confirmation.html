@@ -375,7 +375,8 @@
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + SUPABASE_ANON_KEY
+          "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+          "apikey": SUPABASE_ANON_KEY
         },
         body: JSON.stringify({ reference })
       });
@@ -454,7 +455,7 @@
       el("dName").textContent = safeText(data.customer?.name);
       el("dEmail").textContent = safeText(data.customer?.email);
 
-      const pkgText = data.package ? String(data.package).replace(/^GEN_/i,"").replace(/^PRI_/i,"") : null;
+      const pkgText = data.package ? String(data.package).replace(/^GEN_/i,"").replace(/^PRIV_/i,"") : null;
 
       if(String(data.type).toLowerCase() === "general"){
         el("dType").textContent = "General Space";
