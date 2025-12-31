@@ -381,6 +381,9 @@
     // =========================
     const SUPABASE_URL = "https://dzazdrpgedrrcnuzgjjc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6YXpkcnBnZWRycmNudXpnampjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMjUxOTQsImV4cCI6MjA4MjcwMTE5NH0.8ZRnOiGtyfi5ibmTbKLROnQ4PqBIDvDfeH-mWGUQy_M";
+    const FUNCTIONS_BASE = "https://eaunslmvqezqlukmuutf.functions.supabase.co";
+    const CALLBACK_URL = `${window.location.origin}/confirmation.html`;
+
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // ✅ Option B tables (the new schema we discussed)
@@ -389,7 +392,6 @@
     // - bookings (status: pending/paid)
 
     const CURRENCY = "NGN";
-    const CALLBACK_URL = `${window.location.origin}/confirmation.html`;
 
     // Tabs
     const tabGeneral = document.getElementById("tab-general");
@@ -687,7 +689,7 @@
       return "ZDH-" + (crypto.randomUUID ? crypto.randomUUID().slice(0,8) : String(Date.now()).slice(-8)).toUpperCase();
     }
 
-    // Continue buttons (store payload + redirect to payment.html?ref=...)
+    // Continue buttons (UPDATED: direct Paystack init + redirect)
     genContinue.addEventListener("click", async () => {
       const name = document.getElementById("fullName").value.trim();
       const email = document.getElementById("email").value.trim();
@@ -735,7 +737,23 @@
         seats: qty
       }));
 
-      window.location.href = `payment.html?ref=${encodeURIComponent(booking_ref)}`;
+      const res = await fetch(`${FUNCTIONS_BASE}/paystack-init`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          booking_ref,
+          callback_url: CALLBACK_URL
+        })
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        alert(json.error || "Payment initialization failed");
+        return;
+      }
+
+      // 🔥 GO STRAIGHT TO PAYSTACK
+      window.location.href = json.authorization_url;
     });
 
     privContinue.addEventListener("click", async () => {
@@ -787,7 +805,23 @@
         endDate: end
       }));
 
-      window.location.href = `payment.html?ref=${encodeURIComponent(booking_ref)}`;
+      const res = await fetch(`${FUNCTIONS_BASE}/paystack-init`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          booking_ref,
+          callback_url: CALLBACK_URL
+        })
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        alert(json.error || "Payment initialization failed");
+        return;
+      }
+
+      // 🔥 GO STRAIGHT TO PAYSTACK
+      window.location.href = json.authorization_url;
     });
 
     // Events
