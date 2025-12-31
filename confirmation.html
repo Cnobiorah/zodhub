@@ -213,7 +213,7 @@
     <!-- HEADER -->
     <div class="page-head">
       <div>
-        <h1>✅ Booking Confirmed</h1>
+        <h1 id="headline">✅ Booking Confirmed</h1>
         <div class="sub" id="subline">Your booking details are ready. Present your code at the front desk.</div>
       </div>
       <button class="btn btn-outline" onclick="window.print()">Print / Save</button>
@@ -224,7 +224,7 @@
       <div class="card">
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between">
           <div>
-            <span class="badge ok">Payment successful</span>
+            <span class="badge ok" id="payBadge">Payment successful</span>
             <span class="badge warn" id="validityBadge" style="margin-left:8px">Valid for your booking date</span>
           </div>
           <div class="pill" id="createdAtPill">Created: —</div>
@@ -274,7 +274,7 @@
         <div class="kv"><span>Package</span><span id="dPackage">—</span></div>
         <div class="kv"><span>Total</span><span id="dTotal">—</span></div>
         <div class="kv"><span>Date(s)</span><span id="dDates">—</span></div>
-        <div class="kv"><span>Status</span><span><span class="badge ok">Confirmed</span></span></div>
+        <div class="kv"><span>Status</span><span id="dStatus"><span class="badge ok">Confirmed</span></span></div>
 
         <div class="hr"></div>
 
