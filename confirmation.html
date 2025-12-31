@@ -425,29 +425,43 @@
       };
     }
 
-    async function drawRealQR(text){
-      const canvas = el("qrCanvas");
-      if(!canvas) return;
+    async function loadQrLibOnce(){
+  if (window.QRCode && typeof window.QRCode.toCanvas === "function") return true;
+  if (window.__zodQrLoading) return window.__zodQrLoading;
 
-      // If the QR library is still loading, retry a few times (prevents blank QR)
-      if (typeof window.QRCode === "undefined" || typeof window.QRCode.toCanvas !== "function") {
-        window.__qrRetry = (window.__qrRetry || 0) + 1;
-        if (window.__qrRetry <= 15) {
-          setTimeout(() => drawRealQR(text), 200);
-          return;
-        }
-        console.warn("QRCode library not loaded");
-        return;
-      }
+  window.__zodQrLoading = new Promise((resolve) => {
+    const s = document.createElement("script");
+    s.src = "https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js";
+    s.async = true;
+    s.onload = () => resolve(true);
+    s.onerror = () => resolve(false);
+    document.head.appendChild(s);
+  });
 
-      window.__qrRetry = 0;
+  return window.__zodQrLoading;
+}
 
-      try{
-        await window.QRCode.toCanvas(canvas, text || "ZODHUB", { margin: 1, width: 180 });
-      }catch(e){
-        console.warn("QR render failed:", e);
-      }
-    }catch(e){
+async function drawRealQR(text){
+  const canvas = el("qrCanvas");
+  if(!canvas || !text) return;
+
+  // Ensure QR library exists; do not throw if blocked
+  const ok = await loadQrLibOnce();
+  if (!ok || !window.QRCode || typeof window.QRCode.toCanvas !== "function") {
+    console.warn("QRCode library not loaded");
+    const ctx = canvas.getContext("2d");
+    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
+
+  try{
+    window.QRCode.toCanvas(canvas, text, { width: 180, margin: 1 }, (err) => {
+      if(err) console.error("QR error:", err);
+    });
+  }catch(e){
+    console.warn("QR render failed:", e);
+  }
+}catch(e){
         console.warn("QR render failed:", e);
       }
     }
