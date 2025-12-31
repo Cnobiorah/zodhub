@@ -190,7 +190,6 @@
     }
   </style>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <body>
   <!-- NAV -->
   <div class="nav">
@@ -344,6 +343,11 @@ function renderQRToCanvas(text){
   const canvas = document.getElementById("qrCanvas");
   if (!canvas || !text) return;
 
+  if (typeof QRCode === "undefined") {
+    console.warn("QRCode library not loaded");
+    return;
+  }
+
   QRCode.toCanvas(
     canvas,
     text,
@@ -378,14 +382,6 @@ function renderQRToCanvas(text){
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
-    async function drawQR(text){
-      const canvas = el("qrCanvas");
-      try{
-        await QRCode.toCanvas(canvas, text || "ZODHUB", { margin: 1, width: 180 });
-      }catch(e){
-        console.warn("QR failed:", e);
-      }
     }
 
     async function verifyPaystack(ref){
@@ -487,8 +483,6 @@ if (booking.booking_ref) renderQRToCanvas(booking.booking_ref);
       el("dDates").textContent = (end && end !== start) ? `${start} → ${end}` : safeText(start);
 
       // QR
-      drawQR(booking.booking_ref || "ZODHUB");
-
       // copy
       el("copyBtn").onclick = async () => {
         try{
