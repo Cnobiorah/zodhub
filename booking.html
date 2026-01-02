@@ -477,7 +477,7 @@
       const { data: pkgData, error: pkgErr } = await sb
         .from("packages")
         .select("id, code, name, duration_days, price_ngn, is_active")
-        .eq("is_active", true)
+        .or("is_active.eq.true,is_active.is.null")
         .order("duration_days", { ascending: true });
 
       if(pkgErr) throw pkgErr;
@@ -852,7 +852,25 @@
       privDate.value = t;
 
       try{
+        try {
         await loadPackagesAndResources();
+      } catch (err) {
+        console.error("Failed to load packages/resources:", err);
+        const msg = (err && err.message) ? err.message : String(err);
+        // Show a visible banner so this is not silent in production
+        const banner = document.createElement("div");
+        banner.style.cssText = "margin:12px 0;padding:12px 14px;border-radius:12px;background:#fff3f3;border:1px solid #f3c3c3;color:#7f1d1d;font-weight:600;";
+        banner.textContent = "Could not load packages. Please try again or contact support. (" + msg + ")";
+        // Insert banner above the form
+        const host = document.querySelector(".card .cardBody") || document.querySelector(".card") || document.body;
+        host.prepend(banner);
+        // Disable selects so users don’t proceed with broken data
+        genPackage.innerHTML = '<option value="">No packages available</option>';
+        privPackage.innerHTML = '<option value="">No packages available</option>';
+        genPackage.disabled = true;
+        privPackage.disabled = true;
+        payBtn.disabled = true;
+      }
       }catch(e){
         console.error(e);
         genAvailability.innerHTML = `<span class="badge no">Unavailable</span> <span class="meta"> Booking service error.</span>`;
